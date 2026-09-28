@@ -59,6 +59,7 @@ addLayer("bsm", {
             if (hasUpgrade("d", 22)) mult = mult.mul(125)
             if (hasUpgrade("d", 23)) mult = mult.mul(175)
             if (hasUpgrade("d", 24)) mult = mult.mul(250)
+            mult = mult.mul(buyableEffect("bs", 91))
 
             return mult
         }
@@ -71,6 +72,7 @@ addLayer("bsm", {
             mult = mult.mul(new Decimal(15).pow(challengeCompletions(layer, 11)))
             
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
+            mult = mult.mul(buyableEffect("bs", 91))
 
             return mult
         }
@@ -90,6 +92,8 @@ addLayer("bsm", {
 
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
             if (hasUpgrade("d", 74)) mult = mult.pow(1.25)
+            mult = mult.mul(buyableEffect("bs", 91))
+            mult = mult.mul(new Decimal(250).pow(challengeCompletions("bs", 12)))
             
             if (arg == "c"){
                 return mult
@@ -707,29 +711,36 @@ addLayer("bsm", {
         player.bsm.highestCombo = Decimal.max(player.bsm.highestCombo, player.bsm.combo)
 
         //effects
-        let mult = new Decimal(1)
-        mult = player.bsm.points.add(1).log(2).add(1).pow(2.5)
-        if (hasUpgrade("bs", 31)) mult = mult.mul(15)
-        if (hasUpgrade("d", 41)) mult = mult.pow(1.25)
-        if (hasUpgrade("d", 42)) mult = mult.pow(1.5)
-        if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
-        if (hasUpgrade("d", 44)) mult = mult.pow(2)
+        if (inChallenge("bs", 12)){
+            player.bsm.cutEffect = new Decimal(1)
+            player.bsm.badEffect = new Decimal(1)
+            player.bsm.cEffect = new Decimal(1)
+        } else {
+            let mult = new Decimal(1)
+            mult = player.bsm.points.add(1).log(2).add(1).pow(2.5)
+            if (hasUpgrade("bs", 31)) mult = mult.mul(15)
+            if (hasUpgrade("d", 41)) mult = mult.pow(1.25)
+            if (hasUpgrade("d", 42)) mult = mult.pow(1.5)
+            if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
+            if (hasUpgrade("d", 44)) mult = mult.pow(2)
 
-        player.bsm.cutEffect = mult
-        //=====
-        mult = player.bsm.bad.add(1).pow(100)
-        if (hasUpgrade("bs", 31)) mult = mult.pow(1.5)
-        if (hasUpgrade("d", 41)) mult = mult.pow(1.25)
-        if (hasUpgrade("d", 42)) mult = mult.pow(1.5)
-        if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
-        if (hasUpgrade("d", 44)) mult = mult.pow(2)
+            player.bsm.cutEffect = mult
+            //=====
+            mult = player.bsm.bad.add(1).pow(100)
+            if (hasUpgrade("bs", 31)) mult = mult.pow(1.5)
+            if (hasUpgrade("d", 41)) mult = mult.pow(1.25)
+            if (hasUpgrade("d", 42)) mult = mult.pow(1.5)
+            if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
+            if (hasUpgrade("d", 44)) mult = mult.pow(2)
+            if (hasUpgrade("ddr", 54)) mult = mult.pow(25)
 
-        player.bsm.badEffect = mult
-        //=====
-        mult = player.bsm.highestCombo.add(1).pow(0.25)
+            player.bsm.badEffect = mult
+            //=====
+            mult = player.bsm.highestCombo.add(1).pow(0.25)
+            if (hasUpgrade("ddr", 54)) mult = mult.pow(1.5)
 
-        player.bsm.cEffect = mult
-        
+            player.bsm.cEffect = mult
+        }
     },
 
     tabFormat: [

@@ -63,8 +63,11 @@ addLayer("s", {
         //exp
         layer = "bs"
         if (hasUpgrade(layer, 22)) mult = mult.pow(1.15)
+            
+        if (inChallenge(layer, 12)) mult = mult.pow(0.05)
         //other hypers
         //time dilations/chals
+        if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
         //final
         return mult
     }, //do everything inside the directMult()

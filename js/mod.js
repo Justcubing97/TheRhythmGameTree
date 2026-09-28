@@ -2,7 +2,7 @@ let modInfo = {
 	name: "The Rhythm Game Tree",
 	author: "Justcubing97",
 	pointsName: "Musical Essence",
-	modFiles: ["a.js", "notes.js", "songs.js", "ddr.js", "ddrfc.js", "bs.js", "d.js", "tree.js", "ddrm.js", "bsm.js"],
+	modFiles: ["a.js", "notes.js", "songs.js", "ddr.js", "ddrfc.js", "bs.js", "d.js", "tvc.js", "tree.js", "ddrm.js", "bsm.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -193,6 +193,8 @@ function getPointGen() {
     if (hasUpgrade("d", 64)) mult = mult.mul(upgradeEffect("d", 64))
         
     if (hasUpgrade("n", 413)) mult = mult.pow(1.25)
+
+    if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
 
     //NOT ME GAIN RELATED STUFF AHEAD!
     //mecombonerf for ddr challenges

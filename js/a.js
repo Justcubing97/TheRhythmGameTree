@@ -179,5 +179,12 @@ addLayer("a", {
             tooltip() {return "Have 1e100 Cubes. +5 AP"},
             onComplete() {player.a.points = player.a.points.add(5)}
         },
+        46: {
+            name: "DanceDance-Upgrade",
+            done() {return hasUpgrade("ddr", 54)},
+            unlocked() {return true},
+            tooltip() {return "Have 20 DDR upgrades. +5 AP / Row completion bonus: x1e10 Movement and max Stamina is always at least 1e50."},
+            onComplete() {player.a.points = player.a.points.add(5)}
+        },
     },
 })

@@ -1009,6 +1009,8 @@ addLayer("n", {
             if (hasUpgrade("n", 414)) mult = mult.mul(upgradeEffect("n", 414))
   
             if (hasMilestone("ddr", 2)) mult = mult.pow(1.25)
+                
+            mult = mult.mul(buyableEffect("bs", 92))
 
             let softcap = new Decimal(0.25)
             let softcapStart = new Decimal("1e500")
@@ -1023,6 +1025,7 @@ addLayer("n", {
             if (hasMilestone("s", 14)) mult = player.n.quarter.add(1).pow(0.025).add(1)
             
             mult = mult.mul(buyableEffect("bs", 52))
+            mult = mult.mul(buyableEffect("bs", 92))
             
             if (hasUpgrade("d", 31)) mult = mult.mul(10000)
             if (hasUpgrade("d", 32)) mult = mult.mul(20000)

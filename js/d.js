@@ -126,6 +126,8 @@ addLayer("d", {
         if (hasUpgrade("bs", 43)) expDist = expDist.add(0.1)
 
         mult = mult.mul(player.d.points.add(1).pow(expDist))
+        
+        if (hasAchievement("a", 46)) mult = mult.mul("1e50")
 
         if (hasUpgrade("ddr", 53)) mult = mult.mul(upgradeEffect("ddr", 53))
             
@@ -420,7 +422,7 @@ addLayer("d", {
 
         71: {
             title: "Picometer 1 (10<sup>-12</sup>)",
-            description: "Stamina drains x1,000,000 faster, but x25 Cubes, Distance, and Movement.",
+            description: "Stamina drains x10,000,000 faster, but x25 Cubes, Distance, and Movement.",
             cost: new Decimal("1e60"),
             currencyDisplayName: "Movement",
             currencyInternalName: "movement",
@@ -429,7 +431,7 @@ addLayer("d", {
         },
         72: {
             title: "Picometer 2 (10<sup>-12</sup>)",
-            description: "Stamina drains x10,000,000 faster, but x20 Cubes, Distance, and Movement.",
+            description: "Stamina drains x100,000,000 faster, but x20 Cubes, Distance, and Movement.",
             cost: new Decimal("1e65"),
             currencyDisplayName: "Movement",
             currencyInternalName: "movement",
@@ -438,7 +440,7 @@ addLayer("d", {
         },
         73: {
             title: "Picometer 3 (10<sup>-12</sup>)",
-            description: "Stamina drains x100,000,000 faster, but x15 Cubes, Distance, and Movement.",
+            description: "Stamina drains x1,000,000,000 faster, but x15 Cubes, Distance, and Movement.",
             cost: new Decimal("1e70"),
             currencyDisplayName: "Movement",
             currencyInternalName: "movement",
@@ -447,7 +449,7 @@ addLayer("d", {
         },
         74: {
             title: "Picometer 4 (10<sup>-12</sup>)",
-            description: "A little different! ^1.25 Arrows after first softcap, along with Cubes and BS combo.",
+            description: "A little different! ^1.25 Arrows after first softcap, along with Cubes and BS combo. x10 Cubes.",
             cost: new Decimal("1e75"),
             currencyDisplayName: "Movement",
             currencyInternalName: "movement",
@@ -595,6 +597,8 @@ addLayer("d", {
                 if (getBuyableAmount(this.layer, this.id).gte(20)) init = init.mul(6)
                 if (getBuyableAmount(this.layer, this.id).gte(25)) init = init.mul(7.5)
                 if (getBuyableAmount(this.layer, this.id).gte(30)) init = init.mul(9)
+                if (getBuyableAmount(this.layer, this.id).gte(35)) init = init.mul(10.5)
+                if (getBuyableAmount(this.layer, this.id).gte(40)) init = init.mul(12)
                 return init
             },
             cost(x) {
@@ -741,6 +745,7 @@ addLayer("d", {
 
         if (hasUpgrade("bs", 52)) mult = mult.mul(upgradeEffect("bs", 52))
 
+        if (hasAchievement("a", 46)) mult = Decimal.max(mult, "1e50")
         player.d.maxStamina = mult
 
         //stamina logic
@@ -753,6 +758,8 @@ addLayer("d", {
             if (hasUpgrade("d", 71)) drainRate = drainRate.mul("1e7")
             if (hasUpgrade("d", 72)) drainRate = drainRate.mul("1e8")
             if (hasUpgrade("d", 73)) drainRate = drainRate.mul("1e9")
+                
+            if (hasUpgrade("bs", 53)) drainRate = player.d.maxStamina.div(10)
             
             player.d.stamina = player.d.stamina.sub(drainRate.mul(diff))
             if (player.d.stamina.lte(0.05)) doReset("d", true)

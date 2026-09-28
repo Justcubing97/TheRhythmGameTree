@@ -52,6 +52,7 @@ addLayer("ddrfc", {
 
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
+        if (resettingLayer == "tvc") keep.push("points")
 
         // Stage 4, do the actual data reset
         layerDataReset(this.layer, keep);
@@ -106,7 +107,7 @@ addLayer("ddrfc", {
         },
     },
 
-    branches: [["bs", 1], ["d", 1]],
+    branches: [["bs", 1], ["d", 1], ["tvc", 1]],
     tooltip() {
         if (canReset(this.layer)) return format(player.ddrfc.points) + " Full Combo Tiers (+" + format(getResetGain("ddrfc")) + " Full Combo Tiers on reset)"
         return format(player.ddrfc.points) + " Full Combo Tiers (Unable to reset)"

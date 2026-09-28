@@ -385,38 +385,45 @@ addLayer("ddrm", {
         if (player.ddrfc.points.gte(6) || hasUpgrade("bs", 24)) player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "m").div(100))
 
         //update the effects
-        player.ddrm.mEffect = player.ddrm.marvelous.add(1).pow(0.5).mul(15)
-        player.ddrm.gEffect = player.ddrm.great.add(1).pow(0.5).mul(2)
-        player.ddrm.aEffect = player.ddrm.almost.add(1).log(100).div(25).add(1)
+        if (inChallenge("bs", 12)){
+            player.ddrm.mEffect = new Decimal(1)
+            player.ddrm.gEffect = new Decimal(1)
+            player.ddrm.aEffect = new Decimal(1)
+            player.ddrm.cEffect = new Decimal(1)
+        } else {
+            player.ddrm.mEffect = player.ddrm.marvelous.add(1).pow(0.5).mul(15)
+            player.ddrm.gEffect = player.ddrm.great.add(1).pow(0.5).mul(2)
+            player.ddrm.aEffect = player.ddrm.almost.add(1).log(100).div(25).add(1)
 
-        if (player.ddrm.marvelous.eq(0)) player.ddrm.mEffect = new Decimal(1)
-        if (player.ddrm.great.eq(0)) player.ddrm.gEffect = new Decimal(1)
-        if (player.ddrm.almost.eq(0)) player.ddrm.aEffect = new Decimal(1)
+            if (player.ddrm.marvelous.eq(0)) player.ddrm.mEffect = new Decimal(1)
+            if (player.ddrm.great.eq(0)) player.ddrm.gEffect = new Decimal(1)
+            if (player.ddrm.almost.eq(0)) player.ddrm.aEffect = new Decimal(1)
 
-        if (hasChallenge("ddr", 12)) {
-            player.ddrm.mEffect = player.ddrm.mEffect.mul(50).pow(1.25)
-            player.ddrm.gEffect = player.ddrm.gEffect.mul(50).pow(1.25)
-            player.ddrm.aEffect = player.ddrm.aEffect.mul(1.1).pow(1.1)
-        }
+            if (hasChallenge("ddr", 12)) {
+                player.ddrm.mEffect = player.ddrm.mEffect.mul(50).pow(1.25)
+                player.ddrm.gEffect = player.ddrm.gEffect.mul(50).pow(1.25)
+                player.ddrm.aEffect = player.ddrm.aEffect.mul(1.1).pow(1.1)
+            }
 
-        if (hasMilestone("ddr", 10)) player.ddrm.mEffect = player.ddrm.mEffect.pow(1.15)
-        if (hasMilestone("ddr", 11)) player.ddrm.aEffect = player.ddrm.aEffect.mul(1.5)
-        if (hasMilestone("ddr", 13)) player.ddrm.aEffect = player.ddrm.aEffect.mul(1.25)
+            if (hasMilestone("ddr", 10)) player.ddrm.mEffect = player.ddrm.mEffect.pow(1.15)
+            if (hasMilestone("ddr", 11)) player.ddrm.aEffect = player.ddrm.aEffect.mul(1.5)
+            if (hasMilestone("ddr", 13)) player.ddrm.aEffect = player.ddrm.aEffect.mul(1.25)
+                
+            if (hasUpgrade("ddr", 52)) player.ddrm.aEffect = player.ddrm.aEffect.pow(1.5)
+
+            //combo stuff
+            let mult = new Decimal(1)
+            player.ddrm.highestCombo = Decimal.max(player.ddrm.highestCombo, player.ddrm.combo)
+            mult = player.ddrm.highestCombo.add(1).pow(0.15)
             
-        if (hasUpgrade("ddr", 52)) player.ddrm.aEffect = player.ddrm.aEffect.pow(1.5)
+            if (hasMilestone("ddr", 10)) mult = mult.mul("1e6")
 
-        //combo stuff
-        let mult = new Decimal(1)
-        player.ddrm.highestCombo = Decimal.max(player.ddrm.highestCombo, player.ddrm.combo)
-        mult = player.ddrm.highestCombo.add(1).pow(0.15)
-        
-        if (hasMilestone("ddr", 10)) mult = mult.mul("1e6")
+            if (hasMilestone("ddr", 7)) mult = mult.pow(1.75)
+            if (hasUpgrade("n", 212)) mult = mult.pow(1.5)
+            mult = mult.pow(buyableEffect("ddr", 23))
 
-        if (hasMilestone("ddr", 7)) mult = mult.pow(1.75)
-        if (hasUpgrade("n", 212)) mult = mult.pow(1.5)
-        mult = mult.pow(buyableEffect("ddr", 23))
-
-        player.ddrm.cEffect = mult
+            player.ddrm.cEffect = mult
+        }
 
         //stream
         player.ddrm.mEffect = player.ddrm.mEffect.div(player.ddr.stream)

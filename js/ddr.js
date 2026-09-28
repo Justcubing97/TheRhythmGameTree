@@ -108,6 +108,10 @@ addLayer("ddr", {
         mult = mult.pow(buyableEffect("bs", 82))
         
         if (hasUpgrade("d", 74)) mult = mult.pow(1.25)
+            
+        if (inChallenge("bs", 21)) mult = mult.pow(0.75)
+            
+        if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
 
 		return mult.floor().max(0);
     },
@@ -327,6 +331,12 @@ addLayer("ddr", {
             cost: new Decimal("1e1900"),
             unlocked() {return hasUpgrade("bs", 44)},
         },
+        54: {
+            title: "Effected",
+            description: "Improve BS Combo's and Bad Cuts' effect.",
+            cost: new Decimal("3.33e3333"),
+            unlocked() {return hasUpgrade("bs", 44)},
+        },
     },
 
     milestones: {
@@ -447,6 +457,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal(2)
                 let effect = base.pow(x)
                 return effect
@@ -506,6 +517,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal(125)
                 let effect = base.pow(x)
                 return effect
@@ -566,6 +578,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal(1.05)
                 let effect = base.pow(x)
                 return effect
@@ -626,6 +639,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal("1e10")
                 let effect = base.pow(x)
                 return effect
@@ -694,6 +708,7 @@ addLayer("ddr", {
                 addBuyables(this.layer, 33, new Decimal(5))
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(0)
                 let base = new Decimal(5)
                 let effect = base.mul(x)
                 return effect
@@ -755,6 +770,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal(1.05)
                 let effect = base.pow(x)
                 return effect
@@ -815,6 +831,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal("1e250")
                 let effect = base.pow(x)
                 return effect
@@ -875,6 +892,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal("50")
                 let effect = base.pow(x)
                 return effect
@@ -935,6 +953,7 @@ addLayer("ddr", {
                 }
             },
             effect(x) {
+                if (inChallenge("bs", 21)) return new Decimal(1)
                 let base = new Decimal("1e50")
                 let effect = base.pow(x)
                 return effect
@@ -1465,7 +1484,7 @@ addLayer("ddr", {
     },
     autoUpgrade() {return hasUpgrade("bs", 14)},
 
-    branches: [["ddrfc", 1], ["bs", 1], ["d", 1]],
+    branches: [["ddrfc", 1], ["bs", 1], ["d", 1], ["tvc", 1]],
     tooltip() {
         let text = format(player.ddr.points) + " Arrows (+" + format(getResetGain("ddr")) + " Arrows on reset)"
         if (!canReset(this.layer)) text = format(player.ddr.points) + " Arrows (\"Power Outage\" needed to reset)"
