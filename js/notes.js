@@ -124,6 +124,7 @@ addLayer("n", {
         if (mult.gte(player[layer].softcap3Start)) mult = mult.pow(player[layer].softcap3).mul(new Decimal(player[layer].softcap3Start).pow(decimalOne.sub(player[layer].softcap3)))
 
         mult = mult.pow(buyableEffect("bs", 71))
+        if (inChallenge("tvc", 12)) mult = mult.pow(player.tvc.interFactor)
             
 		return mult.floor().max(0);
     },

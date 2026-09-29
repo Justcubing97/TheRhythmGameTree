@@ -60,6 +60,7 @@ addLayer("bsm", {
             if (hasUpgrade("d", 23)) mult = mult.mul(175)
             if (hasUpgrade("d", 24)) mult = mult.mul(250)
             mult = mult.mul(buyableEffect("bs", 91))
+            if (hasUpgrade("bs", 54)) mult = mult.mul("1e10")
 
             return mult
         }
@@ -69,10 +70,11 @@ addLayer("bsm", {
             mult = mult.mul(player.bsm.cEffect)
             if (hasUpgrade("bs", 33)) mult = mult.mul(15)
             mult = mult.mul(buyableEffect("bs", 42))
+            mult = mult.mul(buyableEffect("bs", 91))
             mult = mult.mul(new Decimal(15).pow(challengeCompletions(layer, 11)))
+            if (hasUpgrade("bs", 54)) mult = mult.mul("1e10")
             
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
-            mult = mult.mul(buyableEffect("bs", 91))
 
             return mult
         }
@@ -89,11 +91,13 @@ addLayer("bsm", {
             if (hasUpgrade("bs", 41)) mult = mult.mul(upgradeEffect("bs", 41))
             if (player.ddrfc.points.gte(8)) mult = mult.mul(50)
             if (hasUpgrade("ddr", 52)) mult = mult.mul(player.ddrm.aEffect)
+            if (hasUpgrade("bs", 54)) mult = mult.mul("1e10")
+            mult = mult.mul(buyableEffect("bs", 91))
+            mult = mult.mul(new Decimal(250).pow(challengeCompletions("bs", 12)))
+            if (hasMilestone("tvc", 7)) mult = mult.mul(player.tvc.effect)
 
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
             if (hasUpgrade("d", 74)) mult = mult.pow(1.25)
-            mult = mult.mul(buyableEffect("bs", 91))
-            mult = mult.mul(new Decimal(250).pow(challengeCompletions("bs", 12)))
             
             if (arg == "c"){
                 return mult
@@ -118,6 +122,7 @@ addLayer("bsm", {
                         player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5))
                     } else if (dir == 14){
                         player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b").mul(5))
                     } else {
                         player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c"))
                         player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c"))
@@ -127,8 +132,10 @@ addLayer("bsm", {
                     player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c"))
                 } else if (dir <= 9){
                     player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b"))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b"))
                 } else if (dir == clickC + 9){
                     player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b"))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b"))
                 }
                 player.bsm.current.shift()
                 break;
@@ -141,6 +148,7 @@ addLayer("bsm", {
                         player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5))
                     } else if (dir == 5){
                         player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b").mul(5))
                     } else {
                         player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c"))
                         player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c"))
@@ -150,8 +158,10 @@ addLayer("bsm", {
                     player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c"))
                 } else if (dir <= 18 && dir >= 10){
                     player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b"))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b"))
                 } else if (dir == clickC){
                     player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b"))
+                        if (hasUpgrade("bs", 54)) player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "b"))
                 }
                 player.bsm.current.shift()
                 break;
@@ -695,7 +705,7 @@ addLayer("bsm", {
                 ]
                 if (player.bsm.current[BSMC][2] > deleteThreshold){ //is it out of the play area?
                     player.bsm.current.shift() //delete it!
-                    player.bsm.combo = new Decimal(0) //bye bye
+                    if (!hasUpgrade("bs", 54)) player.bsm.combo = new Decimal(0) //bye bye
                 }
             }
         }
@@ -733,13 +743,23 @@ addLayer("bsm", {
             if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
             if (hasUpgrade("d", 44)) mult = mult.pow(2)
             if (hasUpgrade("ddr", 54)) mult = mult.pow(25)
+            if (hasChallenge("tvc", 12)) mult = mult.pow(mult.add(1).log(10).add(1).log(10))
 
             player.bsm.badEffect = mult
             //=====
             mult = player.bsm.highestCombo.add(1).pow(0.25)
+            if (hasMilestone("tvc", 5)) mult = mult.mul(mult.add(1).log(10)).pow(1.05)
+            if (hasMilestone("tvc", 7)) mult = mult.mul(player.tvc.effect)
             if (hasUpgrade("ddr", 54)) mult = mult.pow(1.5)
 
             player.bsm.cEffect = mult
+
+            //automation
+            if (hasChallenge("tvc", 21)){
+                player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c").mul(5).mul(diff))
+                player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5).mul(diff))
+                player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5).mul(diff))
+            }
         }
     },
 

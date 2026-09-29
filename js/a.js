@@ -186,5 +186,26 @@ addLayer("a", {
             tooltip() {return "Have 20 DDR upgrades. +5 AP / Row completion bonus: x1e10 Movement and max Stamina is always at least 1e50."},
             onComplete() {player.a.points = player.a.points.add(5)}
         },
+        51: {
+            name: "Intoxicated",
+            done() {return hasChallenge("tvc", 12)},
+            unlocked() {return true},
+            tooltip() {return "Complete \"Intermediate Contamination\". +5 AP"},
+            onComplete() {player.a.points = player.a.points.add(5)}
+        },
+        52: {
+            name: "Worst Infinity Ever",
+            done() {return player.bsm.bad.gte("1.79e308")},
+            unlocked() {return true},
+            tooltip() {return "Have 1.79e308 Bad Cuts. +5 AP"},
+            onComplete() {player.a.points = player.a.points.add(5)}
+        },
+        53: {
+            name: "Expedition Successful",
+            done() {return getBuyableAmount("bs", 111).gte(10)},
+            unlocked() {return true},
+            tooltip() {return "Max out \"11\" in the Beat Saber Campaign. +5 AP"},
+            onComplete() {player.a.points = player.a.points.add(5)}
+        },
     },
 })

@@ -54,6 +54,7 @@ addLayer("s", {
 
         layer = "bs"
         mult = mult.mul(buyableEffect(layer, 21))
+        if (hasChallenge(layer, 21)) mult = mult.mul(new Decimal("1e33").pow(challengeCompletions(layer, 21)))
 
         layer = "d"
         if (hasUpgrade(layer, 31)) mult = mult.mul(10000)
@@ -68,6 +69,8 @@ addLayer("s", {
         //other hypers
         //time dilations/chals
         if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
+        if (inChallenge("tvc", 21)) mult = mult.pow(player.tvc.advancedFactor)
+        if (inChallenge("tvc", 22)) mult = mult.pow(player.tvc.expertFactor)
         //final
         return mult
     }, //do everything inside the directMult()
@@ -376,6 +379,12 @@ addLayer("s", {
             requirementDescription: "15: 1e135 Songs",
             effectDescription: "I love Arrows. We should give them a x1e100 Boost after first softcap!",
             done() { return player.s.points.gte("1e135") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) },
+        },
+        16: {
+            requirementDescription: "16: 1e500 Songs",
+            effectDescription: "Toxic Violet Cubes is a Camellia song made for BSWC2021. It is track 4 in his album \"REX\". Therefore, x1e15 TVC.",
+            done() { return player.s.points.gte("1e500") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) },
         },
     },

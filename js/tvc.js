@@ -34,8 +34,12 @@ addLayer("tvc", {
         mult = mult.mul(buyableEffect(this.layer, 11))
         mult = mult.mul(buyableEffect(this.layer, 12))
         mult = mult.mul(player.tvc.effect)
+
+        layer = "s"
+        if (hasMilestone(layer, 16)) mult = mult.mul("1e15")
         
         layer = "bs"
+        mult = mult.mul(buyableEffect(layer, 101))
         mult = mult.mul(new Decimal(250).pow(challengeCompletions(layer, 12)))
         //exp 
         //other hypers
@@ -99,6 +103,9 @@ addLayer("tvc", {
                 ["display-text", function(){return `Your Toxic Violet Cubes multiply themselves and Cubes by x${format(player.tvc.effect)}`}],
                 "blank",
                 ["display-text", function(){return `<span style="color: red">Your Basic Contamination Factor is ^${format(player.tvc.basicFactor, 6, true)}</span>`}],
+                ["display-text", function(){return `<span style="color: red">Your Intermediate Contamination Factor is ^${format(player.tvc.interFactor, 6, true)}</span>`}],
+                ["display-text", function(){return `<span style="color: red">Your Advanced Contamination Factor is ^${format(player.tvc.advancedFactor, 6, true)}</span>`}],
+                ["display-text", function(){return `<span style="color: red">Your Expert Contamination Factor is ^${format(player.tvc.expertFactor, 6, true)}</span>`}],
                 "blank",
                 "challenges",
             ],
@@ -126,6 +133,42 @@ addLayer("tvc", {
             requirementDescription: "4: 1e20 Toxic Violet Cubes",
             effectDescription: "Toxic Violet Cubes are well... toxic. Unlock the Basic Contamination.",
             done() { return player.tvc.points.gte("1e20") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        5: {
+            requirementDescription: "5: 1e30 Toxic Violet Cubes",
+            effectDescription: "More toxicity! +5 to the effect base of \"Wrong Direction.\" Improve BS Combo's effect.",
+            done() { return player.tvc.points.gte("1e20") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        6: {
+            requirementDescription: "6: 1e40 Toxic Violet Cubes",
+            effectDescription: "Is this just multiplying by 1e10 each time? Unlock the Intermediate Contamination.",
+            done() { return player.tvc.points.gte("1e40") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        7: {
+            requirementDescription: "7: 1e85 Toxic Violet Cubes",
+            effectDescription: "NOPE. The TVC effect now multiplies BS Combo and its effect.",
+            done() { return player.tvc.points.gte("1e85") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        8: {
+            requirementDescription: "8: 1e180 Toxic Violet Cubes",
+            effectDescription: "More Inflation. ^1.1 Arrows after softcap.",
+            done() { return player.tvc.points.gte("1e180") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        9: {
+            requirementDescription: "9: 1e225 Toxic Violet Cubes",
+            effectDescription: "The toxicity is spreading! Unlock the Advanced Contamination.",
+            done() { return player.tvc.points.gte("1e225") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        10: {
+            requirementDescription: "10: 1e265 Toxic Violet Cubes",
+            effectDescription: "The log10 of this requirement is the BPM of Toxic Violet Cubes! x1e10 Cubes.",
+            done() { return player.tvc.points.gte("1e265") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
     },
@@ -208,6 +251,7 @@ addLayer("tvc", {
             },
             effect(x) {
                 let base = new Decimal("10")
+                if (hasMilestone(this.layer, 5)) base = base.add(5)
 
                 let effect = base.pow(x)
                 return effect
@@ -224,11 +268,51 @@ addLayer("tvc", {
             name: "Basic Contamination",
             challengeDescription: "Toxic Violet Cubes are reset. ME, Songs, and Arrows are raised to your BCF.",
             goalDescription: "Have 50 Arrows.",
-            rewardDescription: "Improve Marvelous, Great, and Almost arrow effects, and x5 to all of their gains and Arrows.",
+            rewardDescription: "Improve highest mission level and TVC effects.",
             canComplete: function() {return player.ddr.points.gte(50)},
             unlocked() {return hasMilestone("tvc", 4)},
             onEnter() {player.tvc.points = new Decimal(0)},
             onExit() {player.tvc.points = new Decimal(0)},
+        },
+        12: {
+            name: "Intermediate Contamination",
+            challengeDescription: "Toxic Violet Cubes are reset. ME, Notes, and Arrows are raised to your ICF.",
+            goalDescription: "Have 50 Notes.",
+            rewardDescription: "Improve Bad Cuts' and TVC effects.",
+            canComplete: function() {return player.n.points.gte(50)},
+            unlocked() {return hasMilestone("tvc", 6)},
+            onEnter() {player.tvc.points = new Decimal(0)},
+            onExit() {player.tvc.points = new Decimal(0)},
+        },
+        21: {
+            name: "Advanced Contamination",
+            challengeDescription: "Toxic Violet Cubes are reset. Notes, Songs, and Arrows are raised to your ACF.",
+            goalDescription: "Have 50 Arrows.",
+            rewardDescription: "Automatically gain Cuts, Bad Cuts, and BS Combo as if you were to manually gain them. x1e12 Cubes.",
+            canComplete: function() {return player.ddr.points.gte(50)},
+            unlocked() {return hasMilestone("tvc", 9)},
+            onEnter() {player.tvc.points = new Decimal(0)},
+            onExit() {player.tvc.points = new Decimal(0)},
+        },
+        22: {
+            name: "Expert Contamination",
+            challengeDescription: "Toxic Violet Cubes, Cubes, Distance, and Movement are reset. Songs are raised to your ECF (no, not Easten Conference Finals, this isn't the NHL).",
+            goalDescription: "Have 1e2850 Arrows.",
+            rewardDescription: "x1e40 Cubes!",
+            canComplete: function() {return player.ddr.points.gte("1e2850")},
+            unlocked() {return hasUpgrade("bs", 73)},
+            onEnter() {
+                player.tvc.points = new Decimal(0)
+                player.bs.points = new Decimal(0)
+                player.d.points = new Decimal(0)
+                player.d.movement = new Decimal(0)
+            },
+            onExit() {
+                player.tvc.points = new Decimal(0)
+                player.bs.points = new Decimal(0)
+                player.d.points = new Decimal(0)
+                player.d.movement = new Decimal(0)
+            },
         },
     },
 
@@ -236,6 +320,8 @@ addLayer("tvc", {
         let mult = player.tvc.points.add(1)
 
         mult = mult.log(2).add(1)
+        if (hasChallenge("tvc", 11)) mult = mult.mul(player.tvc.points.add(1).log(10)).pow(1.5)
+        if (hasChallenge("tvc", 12)) mult = mult.mul(player.tvc.points.add(1).log(2)).pow(1.5)
 
         player.tvc.effect = mult
 
@@ -245,6 +331,24 @@ addLayer("tvc", {
         mult = new Decimal(1).div(mult.pow(0.2))
 
         player.tvc.basicFactor = mult
+        
+        mult = player.tvc.points.add(1)
+
+        mult = new Decimal(1).div(mult.pow(0.5))
+
+        player.tvc.interFactor = mult
+        
+        mult = player.tvc.points.add(1)
+
+        mult = new Decimal(1).div(mult.pow(0.8))
+
+        player.tvc.advancedFactor = mult
+        
+        mult = player.tvc.points.add(1)
+
+        mult = new Decimal(1).div(mult.pow(1.1))
+
+        player.tvc.expertFactor = mult
     },
 
     tooltip() {return format(player.tvc.points) + " Toxic Violet Cubes (+" + format(getResetGain("tvc")) + " TVC/s)"},

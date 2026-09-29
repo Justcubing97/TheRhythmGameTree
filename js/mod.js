@@ -12,11 +12,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.2.1",
-	name: "DDR layer fix",
+	num: "3.3",
+	name: "BS layer finale",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v3.3</h2><br>
+		- More content! <br>
+        - A new layer: Toxic Violet Cubes! <br><br>
 	<h2>v3.2.1</h2><br>
         - Fixed a bug with the DDR buyables instantly giving 1e2750 ME at the start of the game. <br><br>
 	<h2>v3.2</h2><br>
@@ -193,8 +196,10 @@ function getPointGen() {
     if (hasUpgrade("d", 64)) mult = mult.mul(upgradeEffect("d", 64))
         
     if (hasUpgrade("n", 413)) mult = mult.pow(1.25)
+    mult = mult.pow(buyableEffect(layer, 111))
 
     if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
+    if (inChallenge("tvc", 12)) mult = mult.pow(player.tvc.interFactor)
 
     //NOT ME GAIN RELATED STUFF AHEAD!
     //mecombonerf for ddr challenges
@@ -213,7 +218,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-    "Current endgame: 5/5 the EASY Beat Saber difficulty.",
+    "Current endgame: 1e1000 Cubes.",
     "The Rhythm Game Tree made by Justcubing97",
     function() {
 		if (inChallenge("ddr", 11) ||
@@ -229,7 +234,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return challengeCompletions("bs", 11) >= 5
+	return player.bs.points.gte("1e1000")
 }
 
 

@@ -28,6 +28,8 @@ addLayer("ddr", {
         
         softcap1: new Decimal(0.25),
         softcap1Start: new Decimal("1e300"), //defaults for normal layers
+        softcap2: new Decimal(0.2),
+        softcap2Start: new Decimal("1e10000"), //defaults for normal layers
     }},
 	color: "#2280C2",
 
@@ -112,6 +114,13 @@ addLayer("ddr", {
         if (inChallenge("bs", 21)) mult = mult.pow(0.75)
             
         if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
+        if (inChallenge("tvc", 12)) mult = mult.pow(player.tvc.interFactor)
+        if (inChallenge("tvc", 21)) mult = mult.pow(player.tvc.advancedFactor)
+        if (hasMilestone("tvc", 8)) mult = mult.pow(1.1)
+
+        mult = mult.pow(buyableEffect("bs", 111))
+            
+        if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
 
 		return mult.floor().max(0);
     },
@@ -1488,6 +1497,7 @@ addLayer("ddr", {
     tooltip() {
         let text = format(player.ddr.points) + " Arrows (+" + format(getResetGain("ddr")) + " Arrows on reset)"
         if (!canReset(this.layer)) text = format(player.ddr.points) + " Arrows (\"Power Outage\" needed to reset)"
+        else if (player.ddr.points.gte(player.ddr.softcap2Start)) text += "<br>[SECOND SOFTCAP - 1e10000]"
         else if (player.ddr.points.gte(player.ddr.softcap1Start)) text += "<br>[FIRST SOFTCAP - 1e300]"
         return text
     },

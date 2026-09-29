@@ -84,6 +84,8 @@ addLayer("ddrfc", {
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     if (player.ddrfc.points.gte(11)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e10 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x50 BS combo gain<br>x15,000 max Stamina<br><br></h3>" +
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
+                    if (player.ddrfc.points.gte(14)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e10 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x50 BS combo gain<br>x15,000 max Stamina<br>x1e10 Movement<br><br></h3>" +
+                                                    "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     return text
                 }],
                 ["blank", "24px"],
@@ -101,6 +103,8 @@ addLayer("ddrfc", {
                     if (player.ddrfc.points.gte(8)) text = "<h3>Nothing!</h3>"
                     if (player.ddrfc.points.gte(10)) text = "<h3>x15,000 max Stamina</h3>"
                     if (player.ddrfc.points.gte(11)) text = "<h3>Nothing!</h3>"
+                    if (player.ddrfc.points.gte(13)) text = "<h3>x1e10 Movement</h3>"
+                    if (player.ddrfc.points.gte(14)) text = "<h3>Nothing!</h3>"
                     return text
                 }],
             ]

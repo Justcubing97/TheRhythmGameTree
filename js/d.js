@@ -36,6 +36,7 @@ addLayer("d", {
 
         layer = "bs"
         mult = mult.mul(buyableEffect(layer, 51))
+        mult = mult.mul(buyableEffect(layer, 101))
         mult = mult.mul(new Decimal(2).pow(challengeCompletions(layer, 11)))
 
         layer = "d"
@@ -138,7 +139,8 @@ addLayer("d", {
 
         mult = mult.mul(buyableEffect("d", 12))
         mult = mult.mul(buyableEffect("bs", 62))
-        mult = mult.mul(new Decimal(2).pow(challengeCompletions(layer, 11)))
+        
+        if (player.ddrfc.points.gte(14)) mult = mult.mul("1e10")
         
         return mult //this returns movement
     },
@@ -599,6 +601,7 @@ addLayer("d", {
                 if (getBuyableAmount(this.layer, this.id).gte(30)) init = init.mul(9)
                 if (getBuyableAmount(this.layer, this.id).gte(35)) init = init.mul(10.5)
                 if (getBuyableAmount(this.layer, this.id).gte(40)) init = init.mul(12)
+                if (getBuyableAmount(this.layer, this.id).gte(45)) init = init.mul(13.5)
                 return init
             },
             cost(x) {
@@ -611,7 +614,7 @@ addLayer("d", {
             },
             title: "Resource Abundance",
             display() {
-                return "x5 Distance and Cubes per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
+                return "x5 Distance and Cubes per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/50" + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             buy() {
@@ -635,6 +638,7 @@ addLayer("d", {
                     "height": "100px"
                 }
             },
+            purchaseLimit() {return new Decimal(50)},
             unlocked() {return true},
             buyMax() {
                 let timesBought = player.d.points
@@ -746,7 +750,7 @@ addLayer("d", {
         if (hasUpgrade("bs", 52)) mult = mult.mul(upgradeEffect("bs", 52))
 
         if (hasAchievement("a", 46)) mult = Decimal.max(mult, "1e50")
-        player.d.maxStamina = mult
+        player.d.maxStamina = Decimal.max(mult, player.d.maxStamina)
 
         //stamina logic
         if (!inChallenge("d", 11)) {
