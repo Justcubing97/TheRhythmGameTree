@@ -138,7 +138,7 @@ addLayer("tvc", {
         5: {
             requirementDescription: "5: 1e30 Toxic Violet Cubes",
             effectDescription: "More toxicity! +5 to the effect base of \"Wrong Direction.\" Improve BS Combo's effect.",
-            done() { return player.tvc.points.gte("1e20") },
+            done() { return player.tvc.points.gte("1e30") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
         6: {
