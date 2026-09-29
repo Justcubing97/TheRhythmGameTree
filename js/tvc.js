@@ -256,7 +256,7 @@ addLayer("tvc", {
                 let effect = base.pow(x)
                 return effect
             },
-            unlocked() {return true},
+            unlocked() {return hasMilestone("tvc", 3)},
             buyMax() {
                 
             },
