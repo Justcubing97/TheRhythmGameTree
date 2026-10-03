@@ -12,11 +12,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.3",
-	name: "BS layer finale",
+	num: "3.3.1",
+	name: "Bs layer finale bugfix",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v3.3.1</h2><br>
+		- Removed QN effect from DDR DANCE LEVEL \"DIFFICULT\"
+        - Added a missing restriction of said DANCE LEVEL. <br><br>
 	<h2>v3.3</h2><br>
 		- More content! <br>
         - A new layer: Toxic Violet Cubes! <br><br>

@@ -1040,7 +1040,7 @@ addLayer("ddr", {
             name: "DIFFICULT",
             challengeDescription: "<i>\"This difficulty is aimed at <b>intermediate players.</b> I hope your rhythm is good.\"</i> <br><br> DDR combo multiplies itself. DDR combo boosts do not work. This challenge resets your DDR combo upon entry and exit.",
             goalDescription: "Have a DDR combo of at least 40.",
-            rewardDescription: "Autobuy Note buyable 1, and unlock another row of HN upgrades. x5 QN.",
+            rewardDescription: "Autobuy Note buyable 1, and unlock another row of HN upgrades.",
             canComplete: function() {return player.ddrm.combo.gte(40)},
             unlocked() {return hasUpgrade(this.layer, 34)},
             style() {
@@ -1356,6 +1356,7 @@ addLayer("ddr", {
                 player.ddr.air = player.ddr.air.mul(100)
                 doReset("bs", true)
             },
+            unlocked() {return hasUpgrade("bs", 42)},
         },
         32: {
             title: "Decrease Air level by -1",
@@ -1365,6 +1366,7 @@ addLayer("ddr", {
                 player.ddr.air = player.ddr.air.div(100)
                 doReset("bs", true)
             },
+            unlocked() {return hasUpgrade("bs", 42)},
         },
         33: {
             title: "Maximize Air level",
@@ -1373,6 +1375,7 @@ addLayer("ddr", {
                 player.ddr.air = new Decimal(1).mul(new Decimal(100).pow(10))
                 doReset("bs", true)
             },
+            unlocked() {return hasUpgrade("bs", 42)},
         },
         34: {
             title: "Minimize Air level",
@@ -1381,6 +1384,7 @@ addLayer("ddr", {
                 player.ddr.air = new Decimal(1)
                 doReset("bs", true)
             },
+            unlocked() {return hasUpgrade("bs", 42)},
         },
     },
 

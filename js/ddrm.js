@@ -109,18 +109,19 @@ addLayer("ddrm", {
             inChallenge("ddr", 21) ||
             inChallenge("ddr", 22) && !hasUpgrade("bs", 12)) mult = mult.mul(player.MEComboNerf)
 
-            
-            if (hasChallenge("ddr", 11)) mult = mult.mul(2.5)
-            if (hasUpgrade("n", 301)) mult = mult.mul(4)
-            if (hasUpgrade("n", 303)) mult = mult.mul(10)
-            if (hasMilestone("s", 10)) mult = mult.mul(player.ddrm.aEffect)
-            if (hasUpgrade("s", 31)) mult = mult.mul(15)
-            if (player.ddrfc.points.gte(4)) mult = mult.mul("1e10")
+            if (!inChallenge("ddr", 21)){
+                if (hasChallenge("ddr", 11)) mult = mult.mul(2.5)
+                if (hasUpgrade("n", 301)) mult = mult.mul(4)
+                if (hasUpgrade("n", 303)) mult = mult.mul(10)
+                if (hasMilestone("s", 10)) mult = mult.mul(player.ddrm.aEffect)
+                if (hasUpgrade("s", 31)) mult = mult.mul(15)
+                if (player.ddrfc.points.gte(4)) mult = mult.mul("1e10")
 
-            mult = mult.mul(buyableEffect("n", 12))
-            mult = mult.mul(buyableEffect("ddr", 32))
-        
-            if (hasUpgrade("bs", 22)) mult = mult.pow(1.15)
+                mult = mult.mul(buyableEffect("n", 12))
+                mult = mult.mul(buyableEffect("ddr", 32))
+            
+                if (hasUpgrade("bs", 22)) mult = mult.pow(1.15)
+            }
             
             let softcap = new Decimal(0.1)
             let softcapStart = new Decimal("1e500")
