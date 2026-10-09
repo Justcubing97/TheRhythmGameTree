@@ -15,6 +15,7 @@ function getStartOptions() {
 		oldStyle: false,
 		forceTooltips: true,
 		hideMilestonePopups: false,
+		bgmmute: false,
 	}
 }
 
@@ -27,6 +28,8 @@ function toggleOpt(name) {
 		changeTreeQuality();
 	if (name == "oldStyle")
 		updateStyle();
+	if (name == "bgmmute")
+		toggleMusicVolume();
 }
 var styleCooldown = 0;
 function updateStyle() {

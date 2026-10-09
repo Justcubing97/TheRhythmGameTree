@@ -121,6 +121,10 @@ addLayer("ddr", {
         mult = mult.pow(buyableEffect("bs", 111))
             
         if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
+            
+        if (hasChallenge("tvc", 13)) mult = mult.mul("1e200")
+            
+        if (hasMilestone("fnf", 13)) mult = mult.pow(1.05)
 
 		return mult.floor().max(0);
     },
@@ -132,10 +136,11 @@ addLayer("ddr", {
         if (hasChallenge("s", 11)) player.ddr.unlocked = true
         return player.ddr.unlocked
     },
-    canReset(){return hasChallenge("s", 11)},
+    canReset(){return hasChallenge("s", 11) && getResetGain(this.layer).gte(1)},
     
     passiveGeneration() {
         if (hasUpgrade("bs", 24)) return 1
+        if (hasMilestone("fnf", 2)) return 1
         return 0
     },
     doReset(resettingLayer) {
@@ -144,6 +149,7 @@ addLayer("ddr", {
 
         // Stage 2, track which specific subfeatures you want to keep, e.g. Upgrade 11, Challenge 32, Buyable 12
         let keptUpgrades = []
+        if (hasMilestone("fnf", 1)) keptUpgrades.push(11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44)
 
         let keptChallenges = []
         if (hasUpgrade("bs", 32)) keptChallenges.push(11, 12, 21, 22, 31, 32)
@@ -359,6 +365,7 @@ addLayer("ddr", {
             effectDescription: "Some people are donating out of respect. The effect of Stream is reduced to ÷10 per level and improve Groove Power's effect. ^1.1 ME and Notes, and ^1.25 QN.",
             done() { return player.ddr.groovePower.gte("1e28") },
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
+            onComplete() { player.ddr.stream = new Decimal("1e10")},
         },
         3: {
             requirementDescription: "3: 1e35 Groove Power",
@@ -404,7 +411,7 @@ addLayer("ddr", {
         },
         10: {
             requirementDescription: "10: 1e150 Groove Power",
-            effectDescription: "You've fully maxed out your Groove Radar. Dramatically improve HC's and M arrows' effect.",
+            effectDescription: "You've fully maxed out your Groove Radar. Dramatically improve DDR highest combo's and M arrows' effect.",
             done() { return player.ddr.groovePower.gte("1e150") },
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
         },
@@ -421,13 +428,13 @@ addLayer("ddr", {
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
         },
         13: {
-            requirementDescription: "12: 1e500 Groove Power",
+            requirementDescription: "13: 1e500 Groove Power",
             effectDescription: "x1e10 Arrows. Almost arrow's effect is improved again.",
             done() { return player.ddr.groovePower.gte("1e500") },
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
         },
-        13: {
-            requirementDescription: "13: 1e2500 Groove Power",
+        14: {
+            requirementDescription: "14: 1e2500 Groove Power",
             effectDescription: "You will get this one in the Beat Saber layer. x1e10 Songs.",
             done() { return player.ddr.groovePower.gte("1e2500") },
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
@@ -458,7 +465,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -518,7 +524,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -579,7 +584,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -640,7 +644,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -700,7 +703,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -763,7 +765,7 @@ addLayer("ddr", {
             },
             title: "DDR X",
             display() {
-                return "The difficulty ratings have been expanded from 10 to 20. I'm stuck at around 7-8, though. ^1.05 to GP and HC effects per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: ^" + format(this.effect())
+                return "The difficulty ratings have been expanded from 10 to 20. I'm stuck at around 7-8, though. ^1.05 to GP and DDR highest combo effects per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: ^" + format(this.effect())
             },
             purchaseLimit() {return new Decimal(250)},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
@@ -771,7 +773,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -832,7 +833,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -893,7 +893,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -954,7 +953,6 @@ addLayer("ddr", {
                 if (player.ddrfc.points.gte(5) || hasUpgrade("bs", 13)){
                     let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
                     let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
-                    player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -1179,8 +1177,8 @@ addLayer("ddr", {
                     if (hasUpgrade("bs", 42))return `Groove Power is also multiplying Distance by x${format(player.ddr.gpeDist)}`
                 }],
                 ["display-text", function(){
-                    if (player.ddr.air.gte(2)) return `<span style="color:#BBBBBB">Start gaining Groove Power at 1e327,600 ME, because Air is active!`
-                    return `<span style="color:#BBBBBB">Start gaining Groove Power at 1e350 Notes!`
+                    if (player.ddr.air.gte(2)) return `<span style="color:#BBBBBB">Start gaining Groove Power at 1e327,600 Musical Essence, because Air is active!`
+                    return `<span style="color:#BBBBBB">Start gaining Groove Power at 1e350 Musical Essence!`
                 }],
                 "blank",
                 ["bar", "stream"],
@@ -1441,6 +1439,7 @@ addLayer("ddr", {
         if (hasUpgrade("bs", 42)) {
             mult = Decimal.max(player.ddr.groovePower.div("1e1530"))
             mult = mult.add(1).log(25).add(1).mul(15)
+            if (hasMilestone("fnf", 5)) mult = mult.mul(12345678).pow(3)
             player.ddr.gpeDist = mult
         }
         
@@ -1450,6 +1449,12 @@ addLayer("ddr", {
                     setBuyableAmount("ddr", id, tmp["ddr"].buyables[id].purchaseLimit)
                 }
             }
+        }
+
+        //tvc23
+        if (hasChallenge("tvc", 23)){
+            player.ddr.softcap1 = new Decimal(0.5)
+            player.ddr.softcap1Start = new Decimal("1e500")
         }
     },
 

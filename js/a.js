@@ -207,5 +207,40 @@ addLayer("a", {
             tooltip() {return "Max out \"11\" in the Beat Saber Campaign. +5 AP"},
             onComplete() {player.a.points = player.a.points.add(5)}
         },
+        54: {
+            name: "Tight bars, little man.",
+            done() {return player.fnf.points.gte(1)},
+            unlocked() {return true},
+            tooltip() {return "FNF reset for the first time. <i>This will be a shorter layer than the Beat Saber layer, but there's still gimmicks!</i> +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        55: {
+            name: "FREAKING FINALLY",
+            done() {return hasMilestone("fnf", 5)},
+            unlocked() {return true},
+            tooltip() {return "Passively generate Cubes. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        56: {
+            name: "Dance Battle Warrior",
+            done() {return hasUpgrade("fnf", 21) && hasUpgrade("fnf", 22) && hasUpgrade("fnf", 23) && hasUpgrade("fnf", 24)},
+            unlocked() {return true},
+            tooltip() {return "Complete Week 2 (Row 2) of FNF upgrades. +25 AP / Row completion bonus: +5% max player health."},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        61: {
+            name: "Overhealed",
+            done() {return player.ddrm.maxHealth.gte(2)},
+            unlocked() {return true},
+            tooltip() {return "Have a max player health of 200%. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        62: {
+            name: "Omnipotent Status - Supernova Immunity",
+            done() {return player.d.maxStamina.gte("1.79e308")},
+            unlocked() {return true},
+            tooltip() {return "Have 1.79e308 max Stamina. Your persistence is literally infinite. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
     },
 })

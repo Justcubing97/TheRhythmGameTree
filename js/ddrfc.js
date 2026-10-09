@@ -19,7 +19,10 @@ addLayer("ddrfc", {
     baseAmount() {return player.ddr.points}, // Get the current amount of baseResource
     requires() {return new Decimal("1e15")},
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 3, // Prestige currency exponent
+    exponent() {
+        if (hasMilestone("fnf", 9)) return 2.85
+        return 3
+    }, // Prestige currency exponent
     base: 100,
     directMult() { // Calculate the multiplier for main currency from bonuses
         let layer;
@@ -41,7 +44,7 @@ addLayer("ddrfc", {
         return player.ddrfc.unlocked
     },
     resetsNothing() {return hasUpgrade("bs", 34)},
-    autoPrestige() {return hasUpgrade("bs", 34)},
+    autoPrestige() {return hasUpgrade("bs", 34) || hasMilestone("fnf", 2)},
     canBuyMax() {return false},
     doReset(resettingLayer) {
         // Stage 1, almost always needed, makes resetting this layer not delete your progress
@@ -86,6 +89,8 @@ addLayer("ddrfc", {
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     if (player.ddrfc.points.gte(14)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e10 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x50 BS combo gain<br>x15,000 max Stamina<br>x1e10 Movement<br><br></h3>" +
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
+                    if (player.ddrfc.points.gte(23)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e60 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x5e51 BS combo gain<br>x15,000 max Stamina<br>x1e10 Movement<br>^0.75 CFs<br><br></h3>" +
+                                                    "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     return text
                 }],
                 ["blank", "24px"],
@@ -100,11 +105,9 @@ addLayer("ddrfc", {
                     if (player.ddrfc.points.gte(5)) text = "<h3>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     if (player.ddrfc.points.gte(6)) text = "<h3>x1e10,000 ME (after third softcap)<br>x100,000 Arrows (after first softcap)<br>x2.5 Cubes</h3>"
                     if (player.ddrfc.points.gte(7)) text = "<h3>x1e250,000 ME (after third softcap)<br>x1e50,000 Notes (after second softcap)<br>x1,000,000 Songs<br>x1e15 Arrows (after first softcap)<br>x10 Cubes<br>x50 BS combo gain</h3>"
-                    if (player.ddrfc.points.gte(8)) text = "<h3>Nothing!</h3>"
-                    if (player.ddrfc.points.gte(10)) text = "<h3>x15,000 max Stamina</h3>"
-                    if (player.ddrfc.points.gte(11)) text = "<h3>Nothing!</h3>"
-                    if (player.ddrfc.points.gte(13)) text = "<h3>x1e10 Movement</h3>"
-                    if (player.ddrfc.points.gte(14)) text = "<h3>Nothing!</h3>"
+                    if (player.ddrfc.points.gte(8)) text = "<h3>At 11 FCTs: x15,000 max Stamina</h3>"
+                    if (player.ddrfc.points.gte(11)) text = "<h3>At 14 FCTs: x1e10 Movement</h3>"
+                    if (player.ddrfc.points.gte(14)) text = "<h3>At 23 FCTs: x1e50 DDR and BS combo gain / ^0.75 all CFs</h3>"
                     return text
                 }],
             ]

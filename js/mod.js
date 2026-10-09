@@ -2,7 +2,7 @@ let modInfo = {
 	name: "The Rhythm Game Tree",
 	author: "Justcubing97",
 	pointsName: "Musical Essence",
-	modFiles: ["a.js", "notes.js", "songs.js", "ddr.js", "ddrfc.js", "bs.js", "d.js", "tvc.js", "tree.js", "ddrm.js", "bsm.js"],
+	modFiles: ["a.js", "notes.js", "songs.js", "ddr.js", "ddrfc.js", "bs.js", "d.js", "tvc.js", "fnf.js", "tree.js", "ddrm.js", "bsm.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -12,13 +12,26 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.3.1",
-	name: "Bs layer finale bugfix",
+	num: "4.0",
+	name: "FNF layer + bugfixes",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v4.0</h2><br>
+		- FNF layer! <br>
+		- Fixed Stamina and TVC being zero. <br>
+		- Fixed unlock condition not being specified in tooltips and reset buttons. <br>
+		- Renamed HC to DDR highest combo. <br>
+		- Fixed a Stream GROOVE RADAR bug where GP would jump to 1e100 after the second GP milestone. <br>
+		- Readded a GP milestone that softlocked the game at 1e201 Arrows. <br>
+		- Changed Notes to Musical Essence in the Groove Power description. <br>
+		- Added a mute button for BGM. <br>
+		- \"Album Release\" now uses total Songs instead of current Songs. <br>
+		- Fixed a very useless bug with GROOVE RADAR Air value (giving Notes an exponent of ^1e-20000...). <br>
+		- Fixed BS Difficulties NORMAL and HARD being unlocked before \"Jump Charts\" (the new name of said upgrade). <br>
+		- Added the ability to change songs within options menu. <br><br>
 	<h2>v3.3.1</h2><br>
-		- Removed QN effect from DDR DANCE LEVEL \"DIFFICULT\"
+		- Removed QN effect from DDR DANCE LEVEL \"DIFFICULT\" <br>
         - Added a missing restriction of said DANCE LEVEL. <br><br>
 	<h2>v3.3</h2><br>
 		- More content! <br>
@@ -203,6 +216,10 @@ function getPointGen() {
 
     if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
     if (inChallenge("tvc", 12)) mult = mult.pow(player.tvc.interFactor)
+        
+    if (hasChallenge("tvc", 32)) mult = mult.pow(1.01)
+        
+    if (inChallenge("bs", 31)) mult = mult.pow(0.001)
 
     //NOT ME GAIN RELATED STUFF AHEAD!
     //mecombonerf for ddr challenges
@@ -221,7 +238,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-    "Current endgame: 1e1000 Cubes.",
+    "Current endgame: e210,000,000 Musical Essence.",
     "The Rhythm Game Tree made by Justcubing97",
     function() {
 		if (inChallenge("ddr", 11) ||
@@ -237,7 +254,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.bs.points.gte("1e1000")
+	return player.points.gte("e210000000")
 }
 
 

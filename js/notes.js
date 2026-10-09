@@ -107,24 +107,29 @@ addLayer("n", {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero
 		let mult = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp)
 
-        player[layer].softcap1 = player[layer].softcap1.div(player.ddr.air)
+        player[layer].softcap1 = new Decimal(0.25).div(player.ddr.air)
         if (mult.gte(player[layer].softcap1Start)) mult = mult.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
             
         if (inChallenge("ddr", 32)) mult = mult.add(1).log("1e10")
         mult = mult.mul(buyableEffect("ddr", 33))
     
-        player[layer].softcap2 = player[layer].softcap2.div(player.ddr.air)
+        player[layer].softcap2 = new Decimal(0.1).div(player.ddr.air)
         if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
 
         if (hasUpgrade("n", 51)) mult = mult.mul(upgradeEffect(layer, 51))
         if (player.ddrfc.points.gte(8)) mult = mult.mul("1e50000")
         if (hasUpgrade("n", 401)) mult = mult.pow(1.005)
             
-        player[layer].softcap3 = player[layer].softcap3.div(player.ddr.air)
+        player[layer].softcap3 = new Decimal(0.05).div(player.ddr.air)
         if (mult.gte(player[layer].softcap3Start)) mult = mult.pow(player[layer].softcap3).mul(new Decimal(player[layer].softcap3Start).pow(decimalOne.sub(player[layer].softcap3)))
 
         mult = mult.pow(buyableEffect("bs", 71))
         if (inChallenge("tvc", 12)) mult = mult.pow(player.tvc.interFactor)
+            
+        if (hasUpgrade("d", 101)) mult = mult.mul(upgradeEffect("d", 101))
+        if (hasUpgrade("d", 102)) mult = mult.mul(upgradeEffect("d", 102))
+        if (hasUpgrade("d", 103)) mult = mult.mul(upgradeEffect("d", 103))
+        if (hasUpgrade("d", 104)) mult = mult.mul(upgradeEffect("d", 104))
             
 		return mult.floor().max(0);
     },
@@ -135,6 +140,7 @@ addLayer("n", {
     layerShown(){return player.n.unlocked},
     passiveGeneration() {if (hasUpgrade("s", 14)) return 1
         if (hasUpgrade("bs", 24)) return 1
+        if (hasMilestone("fnf", 2)) return 1
         else return 0
     },
     doReset(resettingLayer) {
@@ -171,6 +177,26 @@ addLayer("n", {
         if (hasUpgrade("n", 412)) keptUpgrades.push(412)
         if (hasUpgrade("n", 413)) keptUpgrades.push(413)
         if (hasUpgrade("n", 414)) keptUpgrades.push(414)
+            
+        if (hasMilestone("fnf", 1)) keptUpgrades = [
+            11, 12, 13, 14,
+            21, 22, 23, 24,
+            31, 32, 33, 34,
+            41, 42, 43, 44,
+            51, 52, 53, 54,
+
+            101, 102, 103, 104,
+            111, 112, 113, 114,
+
+            201, 202, 203, 204,
+            211, 212, 213, 214,
+
+            301, 302, 303, 304,
+            311, 312, 313, 314,
+
+            401, 402, 403, 404,
+            411, 412, 413, 414,
+        ]
 
         let keptBuyables = []
 
@@ -194,29 +220,29 @@ addLayer("n", {
                 "blank",
                 ["upgrades", [1, 2, 3, 4, 5]],
                 ["blank", "25px"],
-                ["display-text", function(){if (hasUpgrade("n", 34) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.whole)}</h2> Whole Notes <br> (${format(player.n.wholeGain)}/sec)`; else return}],
-                ["display-text", function(){if (hasUpgrade("n", 34) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)) return `<span style="color:#BBBBBB">Start gaining Whole Notes at 1e12 Notes!`; else return}],
+                ["display-text", function(){if (hasUpgrade("n", 34) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.whole)}</h2> Whole Notes <br> (${format(player.n.wholeGain)}/sec)`; else return}],
+                ["display-text", function(){if (hasUpgrade("n", 34) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `<span style="color:#BBBBBB">Start gaining Whole Notes at 1e12 Notes!`; else return}],
                 ["display-text", function(){if (player.n.whole.gte("1e500")) return `<span style="color:#AAAAAA">Whole Note gain is softcapped by ^0.25 after 1e500!`; else return}],
                 "blank",
                 ["upgrades", [10, 11]],
-                ["blank", function() {if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)) return ["1px", "30px"]; else return ["0px", "0px"]}],
-                ["display-text", function(){if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.half)}</h2> Half Notes <br> (${format(player.n.halfGain)}/sec)`; else return}],
-                ["display-text", function(){if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)) return `<span style="color:#BBBBBB">Start gaining Half Notes at 1e18 Notes!`; else return}],
+                ["blank", function() {if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return ["1px", "30px"]; else return ["0px", "0px"]}],
+                ["display-text", function(){if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.half)}</h2> Half Notes <br> (${format(player.n.halfGain)}/sec)`; else return}],
+                ["display-text", function(){if (hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `<span style="color:#BBBBBB">Start gaining Half Notes at 1e18 Notes!`; else return}],
                 ["display-text", function(){if (player.n.half.gte("1e500")) return `<span style="color:#AAAAAA">Half Note gain is softcapped by ^0.25 after 1e500!`; else return}],
                 "blank",
                 ["upgrades", [20, 21]],
-                ["blank", function() {if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)) return ["1px", "30px"]; else return ["0px", "0px"]}],
-                ["display-text", function(){if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.quarter)}</h2> Quarter Notes <br> (${format(player.n.quarterGain)}/sec)`; else return}],
+                ["blank", function() {if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return ["1px", "30px"]; else return ["0px", "0px"]}],
+                ["display-text", function(){if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.quarter)}</h2> Quarter Notes <br> (${format(player.n.quarterGain)}/sec)`; else return}],
                 ["display-text", function(){
                     let et = ""
                     if (hasMilestone("ddr", 6)) et = "no longer"
-                    if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)) return `<span style="color:#BBBBBB">Start gaining Quarter Notes at 1e450 Notes - gain is ${et} logarithmic.`; else return
+                    if (hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)) return `<span style="color:#BBBBBB">Start gaining Quarter Notes at 1e450 Notes - gain is ${et} logarithmic.`; else return
                 }],
                 "blank",
                 ["upgrades", [30, 31]],
-                ["blank", function() {if (hasUpgrade("n", 54)) return ["1px", "30px"]; else return ["0px", "0px"]}],
-                ["display-text", function(){if (hasUpgrade("n", 54)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.eighth)}</h2> Eighth Notes <br> (${format(player.n.eighthGain)}/sec)`; else return}],
-                ["display-text", function(){if (hasUpgrade("n", 54)) return `<span style="color:#BBBBBB">Eighth Note gain is dependent on Quarter Notes!`; else return}],
+                ["blank", function() {if (hasUpgrade("n", 54) || hasMilestone("fnf", 1)) return ["1px", "30px"]; else return ["0px", "0px"]}],
+                ["display-text", function(){if (hasUpgrade("n", 54) || hasMilestone("fnf", 1)) return `You have <h2 style="color: #EEEEEE; text-shadow: 0px 0px 10px #EEEEEE">${format(player.n.eighth)}</h2> Eighth Notes <br> (${format(player.n.eighthGain)}/sec)`; else return}],
+                ["display-text", function(){if (hasUpgrade("n", 54) || hasMilestone("fnf", 1)) return `<span style="color:#BBBBBB">Eighth Note gain is dependent on Quarter Notes!`; else return}],
                 ["display-text", function(){if (player.n.eighth.gte("1e500")) return `<span style="color:#AAAAAA">Eighth Note gain is softcapped by ^0.25 after 1e100!`; else return}],
                 "blank",
                 ["upgrades", [40, 41]],
@@ -538,7 +564,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         202: {
             title: "Musical Multi",
@@ -547,7 +573,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         203: {
             title: "Whole Expansion",
@@ -562,7 +588,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         204: {
             title: "Efficient Workspace",
@@ -571,7 +597,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("s", 12) || hasUpgrade("ddr", 14) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         211: {
             title: "Collaborations!",
@@ -580,7 +606,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         212: {
             title: "Musical Lock-in",
@@ -589,7 +615,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         213: {
             title: "Delayed Reduction",
@@ -604,7 +630,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         214: {
             title: "Dance Hardcore",
@@ -613,7 +639,7 @@ addLayer("n", {
             currencyDisplayName: "Half Notes",
             currencyInternalName: "half",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 21) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
     
         301: {
@@ -623,7 +649,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         302: {
             title: "4/4 Time Signature",
@@ -638,7 +664,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         303: {
             title: "Triple Currency Boost",
@@ -647,7 +673,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         304: {
             title: "Simple Ode to Joy",
@@ -656,7 +682,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14)},
+            unlocked() {return hasUpgrade("ddr", 32) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         311: {
             title: "Groove Energy",
@@ -665,7 +691,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         312: {
             title: "DDR Cabinet Discount",
@@ -674,7 +700,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         313: {
             title: "Even Faster Production",
@@ -689,7 +715,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
         314: {
             title: "ATTACK!! PERFECT FULL COMBO!",
@@ -698,7 +724,7 @@ addLayer("n", {
             currencyDisplayName: "Quarter Notes",
             currencyInternalName: "quarter",
             currencyLayer: "n",
-            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14)},
+            unlocked() {return hasChallenge("ddr", 31) || hasUpgrade("bs", 14) || hasMilestone("fnf", 1)},
         },
 
 
@@ -990,6 +1016,8 @@ addLayer("n", {
             let softcap = new Decimal(0.25)
             let softcapStart = new Decimal("1e500")
             if (mult.gte(softcapStart)) mult = mult.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+            
+            if (hasUpgrade("fnf", 11)) mult = mult.mul(upgradeEffect("fnf", 11))
 
             player.n.halfGain = mult
             player.n.half = player.n.half.add(player.n.halfGain.mul(diff))
@@ -1040,6 +1068,8 @@ addLayer("n", {
             let softcap = new Decimal(0.25)
             let softcapStart = new Decimal("1e500")
             if (mult.gte(softcapStart)) mult = mult.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+            
+            if (hasUpgrade("fnf", 11)) mult = mult.mul(upgradeEffect("fnf", 11))
 
             player.n.eighthGain = mult
             player.n.eighth = player.n.eighth.add(player.n.eighthGain.mul(diff))

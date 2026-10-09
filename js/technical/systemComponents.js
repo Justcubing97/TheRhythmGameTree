@@ -173,6 +173,8 @@ var systemComponents = {
 				</tr> 
 			<tr>
                 <td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{ formatOption(!options.hideMilestonePopups) }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('bgmmute')">BGM Mute: {{ formatOption(!options.bgmmute) }}</button></td>
+                <td><button class="opt" onclick="nextSong()">Change Current Song</button></td>
             </tr>
         </table>`
     },

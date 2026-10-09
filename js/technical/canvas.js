@@ -20,6 +20,7 @@ document.addEventListener("click", async function(event) {
 	);
 
     audio.src = url;
+	if (!options.bgmmute) audio.volume = 0
 	audio.play();
 	player.musicfocus.achievements = []
 	grantAchievement("musicfocus", `${superUniqueVariableNameThatIsOnlyUsedForMusic}1`, true)
@@ -38,6 +39,16 @@ audio.addEventListener("ended", async function () {
 	player.musicfocus.achievements = []
     grantAchievement("musicfocus", `${superUniqueVariableNameThatIsOnlyUsedForMusic}1`, true);
 });
+
+function nextSong() {
+	let finalTime = audio.duration
+	audio.currentTime = finalTime
+}
+
+function toggleMusicVolume() {
+	if (options.bgmmute) audio.volume = 1
+	else audio.volume = 0
+}
 
 function retrieveCanvasData() {
 	let treeCanv = document.getElementById("treeCanvas")

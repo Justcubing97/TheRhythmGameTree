@@ -42,7 +42,7 @@ addLayer("s", {
         layer = "ddr"
         if (hasChallenge(layer, 11)) mult = mult.mul(1.25)
         if (hasMilestone(layer, 1)) mult = mult.mul(1.05)
-        if (hasMilestone(layer, 13)) mult = mult.mul("1e10")
+        if (hasMilestone(layer, 14)) mult = mult.mul("1e10")
 
         mult = mult.mul(player.ddrm.aEffect)
         mult = mult.mul(buyableEffect(layer, 13))
@@ -61,16 +61,36 @@ addLayer("s", {
         if (hasUpgrade(layer, 32)) mult = mult.mul(20000)
         if (hasUpgrade(layer, 33)) mult = mult.mul(40000)
         if (hasUpgrade(layer, 34)) mult = mult.mul(80000)
+            
+        if (hasUpgrade(layer, 81)) mult = mult.mul("1e50")
+        if (hasUpgrade(layer, 82)) mult = mult.mul("1e60")
+        if (hasUpgrade(layer, 83)) mult = mult.mul("1e70")
+        if (hasUpgrade(layer, 84)) mult = mult.mul("1e80")
+
+        layer = "fnf"
+        if (hasMilestone(layer, 1)) mult = mult.mul("1e10")
+        if (hasMilestone(layer, 4)) mult = mult.mul("1e50")
         //exp
+        layer = "tvc"
+        if (hasMilestone(layer, 13)) mult = mult.pow(1.025)
+
         layer = "bs"
         if (hasUpgrade(layer, 22)) mult = mult.pow(1.15)
-            
         if (inChallenge(layer, 12)) mult = mult.pow(0.05)
+
+        layer = "d"
+        if (hasUpgrade(layer, 111)) mult = mult.pow(1.01)
+        if (hasUpgrade(layer, 112)) mult = mult.pow(1.02)
+        if (hasUpgrade(layer, 113)) mult = mult.pow(1.03)
+        if (hasUpgrade(layer, 114)) mult = mult.pow(1.04)
         //other hypers
         //time dilations/chals
         if (inChallenge("tvc", 11)) mult = mult.pow(player.tvc.basicFactor)
         if (inChallenge("tvc", 21)) mult = mult.pow(player.tvc.advancedFactor)
         if (inChallenge("tvc", 22)) mult = mult.pow(player.tvc.expertFactor)
+            
+        layer = "bs"
+        if (inChallenge(layer, 22)) mult = mult.pow(0.01)
         //final
         return mult
     }, //do everything inside the directMult()
@@ -83,7 +103,7 @@ addLayer("s", {
         return player.n.points.gte("1e20") || player.s.unlocked
     },
     resetsNothing() {return hasUpgrade("ddr", 43) && !player.s.resetting},
-    autoPrestige() {return hasUpgrade("ddr", 44) || hasUpgrade("bs", 24)},
+    autoPrestige() {return hasUpgrade("ddr", 44) || hasUpgrade("bs", 24) || hasMilestone("fnf", 2)},
     resetDescription: "Compose ",
     canBuyMax() {return hasMilestone(this.layer, 1) || hasUpgrade("ddr", 12) || hasUpgrade("bs", 11)},
     doReset(resettingLayer) {
@@ -104,11 +124,14 @@ addLayer("s", {
         if (hasUpgrade("s", 43)) keptUpgrades.push(43)
         if (hasUpgrade("s", 44)) keptUpgrades.push(44)
 
+        if (hasMilestone("fnf", 3)) keptUpgrades = [11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44]
+
         if (resettingLayer == "bs") keptUpgrades = []
 
         let keptMilestones = []
         if (hasUpgrade("ddr", 22)) keptMilestones.push(1, 2, 3, 4)
         if (hasChallenge("ddr", 22)) keptMilestones.push(5, 6, 7, 8, 9, 10)
+        if (hasMilestone("fnf", 1)) keptMilestones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
             
         if (resettingLayer == "bs") keptMilestones = []
         if (hasMilestone("s", 11)) keptMilestones.push(11)
@@ -218,7 +241,7 @@ addLayer("s", {
         22: {
             title: "Album Release",
             effect() {
-                let base = player.s.points.add(1)
+                let base = player.s.total.add(1)
                 base = new Decimal(1.5).pow(base)
                 return base
             },

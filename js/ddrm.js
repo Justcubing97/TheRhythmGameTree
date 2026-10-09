@@ -19,6 +19,10 @@ addLayer("ddrm", {
         speed: 1,
         timer: 0,
         paused: false,
+
+        health: new Decimal(0.5),
+        hEffect: new Decimal(1),
+        maxHealth: new Decimal(1),
         
         softcap1: new Decimal(0.1),
         softcap1Start: new Decimal("e1e6"), //defaults for normal layers
@@ -32,6 +36,7 @@ addLayer("ddrm", {
     row: "side",
     position: 1,
     tooltip() { // Optional, tooltip displays when the layer is locked
+        if (player.fnf.unlocked) return ("DDR/FNF Minigame")
         return ("Dance Dance Revolution Minigame")
     },
 
@@ -45,6 +50,8 @@ addLayer("ddrm", {
 
         let keptBuyables = []
 
+        let keptHealth = player.ddrm.health
+
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
 
@@ -52,6 +59,7 @@ addLayer("ddrm", {
         layerDataReset(this.layer, keep);
 
         // Stage 5, add back in the specific subfeatures you saved earlier
+        if (hasMilestone("fnf", 5)) player.ddrm.health = keptHealth
     }, //THANK YOU ESCAPEE FROM THE TMT SERVER
 
     hotkeys: [
@@ -121,6 +129,7 @@ addLayer("ddrm", {
                 mult = mult.mul(buyableEffect("ddr", 32))
             
                 if (hasUpgrade("bs", 22)) mult = mult.pow(1.15)
+                if (player.ddrfc.points.gte(23)) mult = mult.mul("1e50")
             }
             
             let softcap = new Decimal(0.1)
@@ -148,6 +157,12 @@ addLayer("ddrm", {
             if (inChallenge("ddr", 31)) player.ddrm.combo = new Decimal(0)
             else if (inChallenge("ddr", 32) && Math.random() < 0.025) player.ddrm.combo = new Decimal(0)
             else player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "g"))
+
+            if (hasMilestone("fnf", 5)){
+                if (hasMilestone("fnf", 11)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.15))
+                if (hasMilestone("tvc", 13)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.05))
+                player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.01))
+            }
         } else if (getGridData("ddrm", 200 + column) == 1){
             setGridData("ddrm", 200 + column, 0)
 
@@ -158,6 +173,12 @@ addLayer("ddrm", {
             player.ddrm.marvelous = player.ddrm.marvelous.add(tmp.ddrm.findMults_DDRM("m", "m"))
             if (inChallenge("ddr", 32)) player.ddrm.combo = new Decimal(0)
             else player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "m"))
+
+            if (hasMilestone("fnf", 5)){
+                if (hasMilestone("fnf", 11)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.15))
+                if (hasMilestone("tvc", 13)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.1))
+                player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.03))
+            }
         } else if (getGridData("ddrm", 300 + column) == 1){
             setGridData("ddrm", 300 + column, 0)
 
@@ -169,6 +190,12 @@ addLayer("ddrm", {
             if (inChallenge("ddr", 31)) player.ddrm.combo = new Decimal(0)
             else if (inChallenge("ddr", 32) && Math.random() < 0.025) player.ddrm.combo = new Decimal(0)
             else player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "g"))
+
+            if (hasMilestone("fnf", 5)){
+                if (hasMilestone("fnf", 11)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.15))
+                if (hasMilestone("tvc", 13)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.05))
+                player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.01))
+            }
         } else if (getGridData("ddrm", 400 + column) == 1){
             setGridData("ddrm", 400 + column, 0)
 
@@ -179,6 +206,8 @@ addLayer("ddrm", {
             player.ddrm.almost = player.ddrm.almost.add(tmp.ddrm.findMults_DDRM("a", "a"))
             if (inChallenge("ddr", 22) || inChallenge("ddr", 31) || inChallenge("ddr", 32)) player.ddrm.combo = new Decimal(0)
             else if (hasUpgrade("ddr", 31)) player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "a"))
+
+            if (hasMilestone("tvc", 13)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.03))
         } else if (getGridData("ddrm", 500 + column) == 1){
             setGridData("ddrm", 500 + column, 0)
 
@@ -189,6 +218,11 @@ addLayer("ddrm", {
             player.ddrm.almost = player.ddrm.almost.add(tmp.ddrm.findMults_DDRM("a", "a"))
             if (inChallenge("ddr", 22) || inChallenge("ddr", 31) || inChallenge("ddr", 32)) player.ddrm.combo = new Decimal(0)
             else if (hasUpgrade("ddr", 31)) player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "a"))
+
+            if (hasMilestone("fnf", 5)){
+                if (hasMilestone("fnf", 11)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.15))
+                if (hasMilestone("tvc", 13)) player.ddrm.health = Decimal.min(player.ddrm.maxHealth, player.ddrm.health.add(0.03))
+            }
         }
     },
 
@@ -356,14 +390,14 @@ addLayer("ddrm", {
 
         for (var DDRMC = 0; DDRMC < player.ddrm.current.length; DDRMC++){ //this loop moves the notes
             let deleteThreshold = 0
-            if (hasUpgrade("bs", 12)) deleteThreshold = 300
+            if (hasUpgrade("bs", 12) && !hasMilestone("fnf", 5)) deleteThreshold = 300
             if (player.ddrm.timer % 3 <= 0.01 && player.ddrm.paused){ //every few
                 player.ddrm.current[DDRMC][1] = player.ddrm.current[DDRMC][1] - 100 //shift the note in the array
                 setGridData("ddrm", player.ddrm.current[DDRMC][1], player.ddrm.current[DDRMC][0]) //changes the data
                 setGridData("ddrm", player.ddrm.current[DDRMC][1] + 100, "0") //removes the data
                 if (player.ddrm.current[DDRMC][1] < deleteThreshold){ //is it out of the play area?
                     player.ddrm.current.shift() //delete it!
-                    if (hasUpgrade("bs", 12)){
+                    if (hasUpgrade("bs", 12) && !hasMilestone("fnf", 5)){
                         player.ddrm.marvelous = player.ddrm.marvelous.add(tmp.ddrm.findMults_DDRM("m", "m"))
                         player.ddrm.great = player.ddrm.great.add(tmp.ddrm.findMults_DDRM("g", "g"))
                         player.ddrm.almost = player.ddrm.almost.add(tmp.ddrm.findMults_DDRM("a", "a"))
@@ -374,16 +408,20 @@ addLayer("ddrm", {
                         if (hasUpgrade("ddr", 31)) player.ddrm.combo = Decimal.max(player.ddrm.combo.sub(50), new Decimal(0))
                         else player.ddrm.combo = new Decimal(0)
                     }
+
+                    if (hasMilestone("fnf", 5)){
+                        player.ddrm.health = Decimal.max(new Decimal(0), player.ddrm.health.sub(0.05))
+                    }
                 }
             }
         }
 
         //automation!
-        if (hasMilestone("ddr", 4)) player.ddrm.marvelous = player.ddrm.marvelous.add(tmp.ddrm.findMults_DDRM("m", "m").div(100))
-        if (hasMilestone("ddr", 7)) player.ddrm.great = player.ddrm.great.add(tmp.ddrm.findMults_DDRM("g", "g").div(100))
-        if (hasMilestone("ddr", 8)) player.ddrm.almost = player.ddrm.almost.add(tmp.ddrm.findMults_DDRM("a", "a").div(100))
+        if (hasMilestone("ddr", 4) || hasMilestone("fnf", 2)) player.ddrm.marvelous = player.ddrm.marvelous.add(tmp.ddrm.findMults_DDRM("m", "m").div(100))
+        if (hasMilestone("ddr", 7) || hasMilestone("fnf", 2)) player.ddrm.great = player.ddrm.great.add(tmp.ddrm.findMults_DDRM("g", "g").div(100))
+        if (hasMilestone("ddr", 8) || hasMilestone("fnf", 2)) player.ddrm.almost = player.ddrm.almost.add(tmp.ddrm.findMults_DDRM("a", "a").div(100))
 
-        if (player.ddrfc.points.gte(6) || hasUpgrade("bs", 24)) player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "m").div(100))
+        if (player.ddrfc.points.gte(6) || hasUpgrade("bs", 24) || hasMilestone("fnf", 2)) player.ddrm.combo = player.ddrm.combo.add(tmp.ddrm.findMults_DDRM("c", "m").div(100))
 
         //update the effects
         if (inChallenge("bs", 12)){
@@ -411,6 +449,7 @@ addLayer("ddrm", {
             if (hasMilestone("ddr", 13)) player.ddrm.aEffect = player.ddrm.aEffect.mul(1.25)
                 
             if (hasUpgrade("ddr", 52)) player.ddrm.aEffect = player.ddrm.aEffect.pow(1.5)
+            if (hasMilestone("fnf", 8)) player.ddrm.aEffect = player.ddrm.aEffect.pow(3)
 
             //combo stuff
             let mult = new Decimal(1)
@@ -430,6 +469,35 @@ addLayer("ddrm", {
         player.ddrm.mEffect = player.ddrm.mEffect.div(player.ddr.stream)
         player.ddrm.gEffect = player.ddrm.gEffect.div(player.ddr.stream)
         player.ddrm.aEffect = player.ddrm.aEffect.div(player.ddr.stream)
+
+        if (hasMilestone("fnf", 5)){
+            let mult = new Decimal(1)
+            if (player.ddrm.health.gte(0.5)){
+                mult = player.ddrm.health.add(0.5).pow(5)
+                if (hasMilestone("fnf", 14)) mult = mult.mul(player.ddrm.health.pow(1.5))
+            }
+            else mult = player.ddrm.health.add(0.5)
+
+            player.ddrm.hEffect = mult
+
+            mult = new Decimal(1)
+
+            if (hasMilestone("fnf", 7)) mult = mult.add(0.1)
+            if (hasChallenge("tvc", 33)) mult = mult.add(0.15)
+            if (hasAchievement("a", 56)) mult = mult.add(0.05)
+            mult = mult.add(buyableEffect("bs", 123))
+            if (hasMilestone("fnf", 11)) mult = mult.add(0.5)
+
+            player.ddrm.maxHealth = mult
+
+            if (Math.random() > 0.99) player.ddrm.health = Decimal.max(new Decimal(0), player.ddrm.health.sub(0.01))
+        }
+
+        let mult = new Decimal(0.05)
+
+        if (hasMilestone("tvc", 13)) mult = new Decimal(0.25)
+        
+        player.ddrm.softcap2 = mult
     },
 
     tabFormat: [
@@ -448,8 +516,17 @@ addLayer("ddrm", {
         ["display-text", function(){return `Your current DDR combo is <h2 style="color: #0080FF; text-shadow: 0px 0px 10px #0080FF">${format(player.ddrm.combo, 4)}</h2> arrows`}],
         ["blank", "8px"],
         ["display-text", function(){return "Use arrow keys or click the white arrows to hit them! Hit / to pause DDR."}],
+        ["blank", function() {if (hasMilestone("fnf", 5)) return ["8px", "17px"]; else return ["0px", "0px"]}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return "Missing a note decreases your health by 5%."}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return "Hitting a Sick!! (Marvelous) note increases your health by 3%."}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return "Hitting a Good! (Great) note increases your health by 1%."}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return "Hitting a Bad (Almost) note does not change your health."}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return "Your health will occasionally decay."}],
+        ["display-text", function(){if (hasMilestone("fnf", 5)) return `<b>Max health: ${format(player.ddrm.maxHealth.mul(100))}%</b>.`}],
         "blank",
-        "grid"
+        ["bar", "FNFhealth"],
+        "blank",
+        "grid",
     ],
 
     infoboxes: {
@@ -464,6 +541,30 @@ addLayer("ddrm", {
                 "M and G hits increase the combo, usually by 1 but can be increased, and A hits do nothing. Missing an arrow resets your current combo. " +
                 "The two buttons on the top are for clearing and pausing the board, respectively. Use them if you're not playing the minigame." },
             unlocked() {return true},
+        },
+    },
+
+    bars: {
+        FNFhealth: {
+            direction: LEFT,
+            width: 555,
+            height: 50,
+            display() {
+                let text = `Player health: ${format(player.ddrm.health.mul(100))}%<br>Your health is multiplying Funk Points by x${format(player.ddrm.hEffect)}`
+                return text
+            },
+            progress() {
+                let prog = new Decimal(0)
+                prog = player.ddrm.health
+                
+                return prog
+            },
+            fillStyle() {
+                if (player.ddrm.health.gt(1.001)) return {"background-color": "#2A2",}
+                return {"background-color": "#080",}
+            },
+            baseStyle() { return {"background-color": "#800",} },
+            unlocked() { return hasMilestone("fnf", 5) },
         },
     },
 

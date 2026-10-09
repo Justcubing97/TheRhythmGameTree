@@ -61,6 +61,10 @@ addLayer("bsm", {
             if (hasUpgrade("d", 24)) mult = mult.mul(250)
             mult = mult.mul(buyableEffect("bs", 91))
             if (hasUpgrade("bs", 54)) mult = mult.mul("1e10")
+                
+            if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
+            if (hasChallenge("tvc", 31)) mult = mult.mul("1e50")
+            if (hasMilestone("fnf", 13)) mult = mult.mul("1e1000")
 
             return mult
         }
@@ -71,8 +75,10 @@ addLayer("bsm", {
             if (hasUpgrade("bs", 33)) mult = mult.mul(15)
             mult = mult.mul(buyableEffect("bs", 42))
             mult = mult.mul(buyableEffect("bs", 91))
-            mult = mult.mul(new Decimal(15).pow(challengeCompletions(layer, 11)))
             if (hasUpgrade("bs", 54)) mult = mult.mul("1e10")
+                
+            if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
+            if (hasChallenge("tvc", 31)) mult = mult.mul("1e50")
             
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
 
@@ -95,9 +101,14 @@ addLayer("bsm", {
             mult = mult.mul(buyableEffect("bs", 91))
             mult = mult.mul(new Decimal(250).pow(challengeCompletions("bs", 12)))
             if (hasMilestone("tvc", 7)) mult = mult.mul(player.tvc.effect)
+            if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
+            if (hasChallenge("tvc", 32)) mult = mult.mul("1e100")
 
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
             if (hasUpgrade("d", 74)) mult = mult.pow(1.25)
+            if (player.ddrfc.points.gte(23)) mult = mult.mul("1e50")
+                
+            if (hasUpgrade("fnf", 22)) mult = mult.mul(upgradeEffect("fnf", 22))
             
             if (arg == "c"){
                 return mult
@@ -705,7 +716,7 @@ addLayer("bsm", {
                 ]
                 if (player.bsm.current[BSMC][2] > deleteThreshold){ //is it out of the play area?
                     player.bsm.current.shift() //delete it!
-                    if (!hasUpgrade("bs", 54)) player.bsm.combo = new Decimal(0) //bye bye
+                    if (!hasUpgrade("bs", 54) && !hasMilestone("fnf", 2)) player.bsm.combo = new Decimal(0) //bye bye
                 }
             }
         }
@@ -733,6 +744,7 @@ addLayer("bsm", {
             if (hasUpgrade("d", 42)) mult = mult.pow(1.5)
             if (hasUpgrade("d", 43)) mult = mult.pow(1.75)
             if (hasUpgrade("d", 44)) mult = mult.pow(2)
+            if (hasChallenge("tvc", 31)) mult = mult.pow(mult.add(1).log(10).add(1).log(10))
 
             player.bsm.cutEffect = mult
             //=====
@@ -750,12 +762,14 @@ addLayer("bsm", {
             mult = player.bsm.highestCombo.add(1).pow(0.25)
             if (hasMilestone("tvc", 5)) mult = mult.mul(mult.add(1).log(10)).pow(1.05)
             if (hasMilestone("tvc", 7)) mult = mult.mul(player.tvc.effect)
+            if (hasUpgrade("fnf", 22)) mult = mult.mul(upgradeEffect("fnf", 22))
+            if (hasMilestone("fnf", 13)) mult = mult.mul("1e50")
             if (hasUpgrade("ddr", 54)) mult = mult.pow(1.5)
 
             player.bsm.cEffect = mult
 
             //automation
-            if (hasChallenge("tvc", 21)){
+            if (hasChallenge("tvc", 21) || hasMilestone("fnf", 2)){
                 player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c").mul(5).mul(diff))
                 player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5).mul(diff))
                 player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5).mul(diff))
