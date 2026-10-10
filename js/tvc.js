@@ -144,6 +144,7 @@ addLayer("tvc", {
                 "blank",
                 "challenges",
             ],
+            unlocked() {return hasMilestone("tvc", 4)}
         },
     },
     milestones: {
