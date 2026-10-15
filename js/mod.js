@@ -12,11 +12,13 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "4.0",
+	num: "4.0.1",
 	name: "FNF layer + bugfixes",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v4.0.1</h2><br>
+        - Changed the \"Super Convoluted Contamination\" goal to 1e250 Arrows for more leniency. <br><br>
 	<h2>v4.0</h2><br>
 		- FNF layer! <br>
 		- Fixed Stamina and TVC being zero. <br>

@@ -575,9 +575,9 @@ addLayer("tvc", {
         33: {
             name: "Super Convoluted Contamination",
             challengeDescription: "Toxic Violet Cubes are reset. ^0.01 TVC. Experience the effects of all Contaminations.",
-            goalDescription: "Have 1e260 Arrows.",
+            goalDescription: "Have 1e250 Arrows.",
             rewardDescription: "All Contamination Factors are weaker. x1e20 TVC, +15% max player health, x1e33 Distance, and x1e10 max Stamina. <i>This Contamination only has to be completed once.</i>",
-            canComplete: function() {return player.ddr.points.gte("1e260")},
+            canComplete: function() {return player.ddr.points.gte("1e250")},
             unlocked() {return hasMilestone("tvc", 12)},
             onEnter() {player.tvc.points = new Decimal(0)},
             onExit() {player.tvc.points = new Decimal(0)},
