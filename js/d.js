@@ -623,7 +623,7 @@ addLayer("d", {
                 return base
 
             },
-            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id)) + " ME"},
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
             description: "Movement boosts Notes after third softcap, Femtometer 1-4's, and Millimeter 1's effect.",
             cost: new Decimal("1e950"),
             currencyDisplayName: "Movement",
@@ -646,7 +646,7 @@ addLayer("d", {
                 return base
 
             },
-            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id)) + " ME"},
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
             description: "Movement boosts Notes after third softcap, Femtometer 1-4's, and Millimeter 1-2's effect.",
             cost: new Decimal("1e975"),
             currencyDisplayName: "Movement",
@@ -667,7 +667,7 @@ addLayer("d", {
                 return base
 
             },
-            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id)) + " ME"},
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
             description: "Movement boosts Notes after third softcap, Femtometer 1-4's, and Millimeter 1-3's effect.",
             cost: new Decimal("1e1000"),
             currencyDisplayName: "Movement",
