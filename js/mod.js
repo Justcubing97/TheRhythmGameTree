@@ -12,11 +12,20 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "4.0.1",
-	name: "FNF layer + bugfixes",
+	num: "4.1",
+	name: "Girlfriend Level expansion + tweaks",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v4.1</h2><br>
+        - Expanded FNF layer. <br>
+        - DanceDance-Upgrade achievement is slightly reworked. <br>
+        - More achievements. <br>
+        - 12C's effect display is correct now. <br>
+        - EXPERT and EXPERT+ completions now highlight. <br>
+        - Added parentheticals to FCT boosts. <br>
+        - Changed the 14th TVC milestone. <br>
+        - FINALLY FIXED THE STUPID BUG WHERE GROOVE POWER WOULD JOLT BY x1e10 RESULTING IN UNEVEN GAINS GOSH I TRIED SO HARD TO FIX THIS BUG I'M SO GLAD IT'S FINALLY OVERRRRRRRRRRRRRRRR. <br><br>
 	<h2>v4.0.1</h2><br>
         - Changed the \"Super Convoluted Contamination\" goal to 1e250 Arrows for more leniency. <br><br>
 	<h2>v4.0</h2><br>
@@ -187,6 +196,8 @@ function getPointGen() {
     let softcap1 = new Decimal(0.25)
     softcap1 = softcap1.add(buyableEffect("bs", 81))
     softcap1 = softcap1.div(player.ddr.air)
+    if (hasMilestone("tvc", 15)) softcap1 = softcap1.add(0.1)
+    if (inChallenge("fnf", 21)) softcap1 = new Decimal(0.001)
 
     let softcap1Start = new Decimal("1e2000")
     if (mult.gte(softcap1Start)) mult = mult.pow(softcap1).mul(new Decimal(softcap1Start).pow(decimalOne.sub(softcap1)))
@@ -194,6 +205,7 @@ function getPointGen() {
     let softcap2 = new Decimal(0.2)
     softcap2 = softcap2.add(buyableEffect("bs", 81))
     softcap2 = softcap2.div(player.ddr.air)
+    if (inChallenge("fnf", 21)) softcap2 = new Decimal(0.001)
     
     let softcap2Start = new Decimal("1e500000")
     if (mult.gte(softcap2Start)) mult = mult.pow(softcap2).mul(new Decimal(softcap2Start).pow(decimalOne.sub(softcap2)))
@@ -201,6 +213,7 @@ function getPointGen() {
     let softcap3 = new Decimal(0.15)
     softcap3 = softcap3.add(buyableEffect("bs", 81))
     softcap3 = softcap3.div(player.ddr.air)
+    if (inChallenge("fnf", 21)) softcap3 = new Decimal(0.001)
 
     let softcap3Start = new Decimal("e1e6")
     if (mult.gte(softcap3Start)) mult = mult.pow(softcap3).mul(new Decimal(softcap3Start).pow(decimalOne.sub(softcap3)))
@@ -223,6 +236,13 @@ function getPointGen() {
         
     if (inChallenge("bs", 31)) mult = mult.pow(0.001)
 
+    let softcap4 = new Decimal(0.1)
+
+    if (inChallenge("fnf", 21)) softcap4 = new Decimal(0.001)
+
+    let softcap4Start = new Decimal("e6e8")
+    if (mult.gte(softcap4Start)) mult = mult.pow(softcap4).mul(new Decimal(softcap4Start).pow(decimalOne.sub(softcap4)))
+
     //NOT ME GAIN RELATED STUFF AHEAD!
     //mecombonerf for ddr challenges
     if (inChallenge("ddr", 11)) player.MEComboNerf = player.points.add(2).log(10).div(350)
@@ -240,7 +260,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-    "Current endgame: e210,000,000 Musical Essence.",
+    "Current endgame: 1e225 Funk Points.",
     "The Rhythm Game Tree made by Justcubing97",
     function() {
 		if (inChallenge("ddr", 11) ||
@@ -252,11 +272,12 @@ var displayThings = [
     function() {if (player.points.gte("1e2000")) return "<b>FIRST SOFTCAP: 1e2000</b>"},
     function() {if (player.points.gte("1e500000")) return "<b>SECOND SOFTCAP: 1e500000</b>"},
     function() {if (player.points.gte("e1e6")) return "<b>THIRD SOFTCAP: e1000000</b>"},
+    function() {if (player.points.gte("e6e8")) return "<b>FOURTH SOFTCAP: e600000000</b>"},
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte("e210000000")
+	return player.fnf.points.gte("1e225")
 }
 
 

@@ -13,6 +13,9 @@ addLayer("bs", {
 
         softcap1: new Decimal(0.25),
         softcap1Start: new Decimal("1e1000"), //defaults for normal layers
+
+        softcap2: new Decimal(0.2),
+        softcap2Start: new Decimal("1e5000"), //defaults for normal layers
     }},
     color: "#E00000",
 	nodeStyle() {
@@ -79,6 +82,8 @@ addLayer("bs", {
             
         layer = "fnf"
         if (hasMilestone(layer, 1)) mult = mult.mul("1e10")
+            
+        mult = mult.mul(player.fnf.levelEffect2)
         //exp 
         layer = "d"
         if (hasUpgrade(layer, 74)) mult = mult.pow(1.25)
@@ -96,6 +101,7 @@ addLayer("bs", {
 
         if (gain.gte(player[layer].softcap1Start)) gain = gain.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
         //put after first softcap things after this line
+        gain = gain.mul(buyableEffect("d", 21))
 
         if (hasUpgrade("fnf", 12)) gain = gain.pow(upgradeEffect("fnf", 12))
 
@@ -103,6 +109,10 @@ addLayer("bs", {
         if (hasUpgrade("d", 92)) gain = gain.pow(1.02)
         if (hasUpgrade("d", 93)) gain = gain.pow(1.015)
         if (hasUpgrade("d", 94)) gain = gain.pow(1.01)
+            
+        gain = gain.pow(player.bsm.sacExp)
+        
+        if (gain.gte(player[layer].softcap2Start)) gain = gain.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
             
 		return gain.floor().max(0);
     },
@@ -131,6 +141,10 @@ addLayer("bs", {
             61, 62, 63, 64,
             71, 72, 73, 74,
         )
+        
+        let FNFList = [81, 82, 83, 84, 91, 92, 93, 94]
+        FNFList.forEach(function(element){if (hasUpgrade("bs", element)) keptUpgrades.push(element)})
+        
 
         let keptBuyables = []
         
@@ -179,6 +193,9 @@ addLayer("bs", {
                 ["display-text", function(){return "Row 6-7 (DON'T SAY IT) upgrades are for unlocking mechanics."}],
                 ["blank", "4px"],
                 ["upgrades", [6, 7]],
+                "blank",
+                ["display-text", function(){if (hasMilestone("fnf", 19)) return "Row 8-9 upgrades are for further progression in post-BS layers."}],
+                ["upgrades", [8, 9]],
 
             ],
         },
@@ -221,6 +238,10 @@ addLayer("bs", {
                 ["row", [["buyable", 111]]],
                 ["blank", function() {if (!player.bs.hideCampaignI_XI) return ["40px", "40px"]; else return ["0px", "0px"]}],
                 ["row", [["buyable", 121], ["blank", ["30px", "10px"]], ["buyable", 122], ["blank", ["30px", "10px"]], ["buyable", 123]]],
+                ["blank", function() {return ["40px", "40px"]}],
+                ["row", [["buyable", 131], ["blank", ["30px", "10px"]], ["buyable", 132]]],
+                ["blank", function() {return ["40px", "40px"]}],
+                ["row", [["buyable", 141], ["blank", ["30px", "10px"]], ["buyable", 142]]],
             ],
             unlocked() {return hasUpgrade("bs", 62)},
         },
@@ -282,10 +303,16 @@ addLayer("bs", {
 
                 if (hasUpgrade(this.layer, 44)) base = base.pow(1.4)
 
-                let softcap = new Decimal(0.25)
-                let softcapStart = new Decimal("1e100")
+                let softcap1 = new Decimal(0.25)
+                let softcap1Start = new Decimal("1e100")
 
-                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                if (base.gte(softcap1Start)) base = base.pow(softcap1).mul(new Decimal(softcap1Start).pow(decimalOne.sub(softcap1))) //softcap
+
+                let softcap2 = new Decimal(0.1) 
+                let softcap2Start = new Decimal("1e25000")
+
+                if (base.gte(softcap2Start)) base = base.pow(softcap2).mul(new Decimal(softcap2Start).pow(decimalOne.sub(softcap2))) //softcap
+
                 return base
             },
             effectDisplay() {
@@ -416,10 +443,15 @@ addLayer("bs", {
                 let base = player.d.points.add(1)
                 base = base.pow(0.25).mul(5).add(1)
 
-                let softcap = new Decimal(0.5)
-                let softcapStart = new Decimal("1e100")
+                let softcap1 = new Decimal(0.5) 
+                let softcap1Start = new Decimal("1e100")
 
-                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                if (base.gte(softcap1Start)) base = base.pow(softcap1).mul(new Decimal(softcap1Start).pow(decimalOne.sub(softcap1))) //softcap
+
+                let softcap2 = new Decimal(0.2) 
+                let softcap2Start = new Decimal("1e375")
+
+                if (base.gte(softcap2Start)) base = base.pow(softcap2).mul(new Decimal(softcap2Start).pow(decimalOne.sub(softcap2))) //softcap
                 return base
             },
             effectDisplay() {
@@ -485,6 +517,19 @@ addLayer("bs", {
             description: "Unlock the next layer.",
             cost: new Decimal("1e1000"),
             unlocked() {return hasUpgrade("bs", 64)},
+        },
+        
+        81: {
+            title: "Cube Transcendence",
+            description: "Add five completions to EXPERT+ difficulty. EXPERT+ completions now boost player health.",
+            cost: new Decimal("1e6000"),
+            unlocked() {return hasMilestone("fnf", 19)},
+        },
+        82: {
+            title: "Anti-Scaling",
+            description: "Remove the first Girlfriend Level scaling. Additionally, lower the exponent for FCTs and they boost Songs.",
+            cost: new Decimal("1e6020"),
+            unlocked() {return hasMilestone("fnf", 19)},
         },
     },
 
@@ -1848,6 +1893,11 @@ addLayer("bs", {
                 totalCost = totalCost.mul(polynomial)
                 return [totalCost, timesBought]
             },
+
+            branches: function(){
+                if (getBuyableAmount(this.layer, this.id).gte(15)) return [[131, 1], [132, 1]]
+                return [[131, 2], [132, 2]]
+            },
         },
         123: {
             base() {return new Decimal("1e1500")},
@@ -1865,7 +1915,7 @@ addLayer("bs", {
             },
             title: "<h2>12C</h2>",
             display() {
-                return "+5% max health per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: +" + format(this.effect()) + "%"
+                return "+5% max health per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: +" + format(this.effect().mul(100)) + "%"
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) && getBuyableAmount(this.layer, 92).gte(10) },
             buy() {
@@ -1881,6 +1931,278 @@ addLayer("bs", {
             },
             effect(x) {
                 let base = new Decimal("0.05")
+                let effect = base.mul(x)
+                return effect
+            },
+            style() {
+                return {
+                    "font-size": "14px"
+                }
+            },
+            purchaseLimit() {return new Decimal(15)},
+            unlocked() {return hasMilestone("fnf", 10)},
+            buyMax() {
+                let timesBought = player.bs.points
+                //insert cost effects here
+
+                timesBought = timesBought.mul(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].base)
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+                timesBought = timesBought.add(1).log(tmp[this.layer].buyables[this.id].exponentialBase)
+                timesBought = timesBought.floor()
+
+                let totalCost = tmp[this.layer].buyables[this.id].base
+                totalCost = totalCost.mul(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+
+                //insert cost effects here
+
+                let polynomial = new Decimal(tmp[this.layer].buyables[this.id].exponentialBase)
+                polynomial = polynomial.pow(timesBought).sub(1)
+                polynomial = polynomial.div(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                totalCost = totalCost.mul(polynomial)
+                return [totalCost, timesBought]
+            },
+
+            branches: function(){
+                if (getBuyableAmount(this.layer, this.id).gte(15)) return [[142, 1]]
+                return [[142, 2]]
+            },
+        },
+        
+        131: {
+            base() {return new Decimal("1e2750")},
+            exponentialBase() {
+                let init = new Decimal("1e150")
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "<h2>13A</h2>",
+            display() {
+                return "^1.02 TVC per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: ^" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost()) && getBuyableAmount(this.layer, 122).gte(10) },
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("1.02")
+                let effect = base.pow(x)
+                return effect
+            },
+            style() {
+                return {
+                    "font-size": "14px"
+                }
+            },
+            purchaseLimit() {return new Decimal(15)},
+            unlocked() {return hasMilestone("fnf", 10)},
+            buyMax() {
+                let timesBought = player.bs.points
+                //insert cost effects here
+
+                timesBought = timesBought.mul(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].base)
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+                timesBought = timesBought.add(1).log(tmp[this.layer].buyables[this.id].exponentialBase)
+                timesBought = timesBought.floor()
+
+                let totalCost = tmp[this.layer].buyables[this.id].base
+                totalCost = totalCost.mul(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+
+                //insert cost effects here
+
+                let polynomial = new Decimal(tmp[this.layer].buyables[this.id].exponentialBase)
+                polynomial = polynomial.pow(timesBought).sub(1)
+                polynomial = polynomial.div(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                totalCost = totalCost.mul(polynomial)
+                return [totalCost, timesBought]
+            },
+
+            branches: function(){
+                if (getBuyableAmount(this.layer, this.id).gte(15)) return [[141, 1]]
+                return [[141, 2]]
+            },
+        },
+        132: {
+            base() {return new Decimal("1e2750")},
+            exponentialBase() {
+                let init = new Decimal("1e50")
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "<h2>13B</h2>",
+            display() {
+                return "x25 GFXP per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost()) && getBuyableAmount(this.layer, 122).gte(10) },
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("25")
+                let effect = base.pow(x)
+                return effect
+            },
+            style() {
+                return {
+                    "font-size": "14px"
+                }
+            },
+            purchaseLimit() {return new Decimal(15)},
+            unlocked() {return hasMilestone("fnf", 10)},
+            buyMax() {
+                let timesBought = player.bs.points
+                //insert cost effects here
+
+                timesBought = timesBought.mul(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].base)
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+                timesBought = timesBought.add(1).log(tmp[this.layer].buyables[this.id].exponentialBase)
+                timesBought = timesBought.floor()
+
+                let totalCost = tmp[this.layer].buyables[this.id].base
+                totalCost = totalCost.mul(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+
+                //insert cost effects here
+
+                let polynomial = new Decimal(tmp[this.layer].buyables[this.id].exponentialBase)
+                polynomial = polynomial.pow(timesBought).sub(1)
+                polynomial = polynomial.div(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                totalCost = totalCost.mul(polynomial)
+                return [totalCost, timesBought]
+            },
+
+            branches: function(){
+                if (getBuyableAmount(this.layer, this.id).gte(15)) return [[141, 1], [142, 1]]
+                return [[141, 2], [142, 2]]
+            },
+        },
+        142: {
+            base() {return new Decimal("1e3500")},
+            exponentialBase() {
+                let init = new Decimal("1e500")
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "<h2>14B</h2>",
+            display() {
+                return "x1e50 Arrows after second softcap per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost()) && getBuyableAmount(this.layer, 123).gte(10) && getBuyableAmount(this.layer, 132).gte(10) },
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("1e50")
+                let effect = base.pow(x)
+                return effect
+            },
+            style() {
+                return {
+                    "font-size": "14px"
+                }
+            },
+            purchaseLimit() {return new Decimal(15)},
+            unlocked() {return hasMilestone("fnf", 10)},
+            buyMax() {
+                let timesBought = player.bs.points
+                //insert cost effects here
+
+                timesBought = timesBought.mul(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].base)
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+                timesBought = timesBought.add(1).log(tmp[this.layer].buyables[this.id].exponentialBase)
+                timesBought = timesBought.floor()
+
+                let totalCost = tmp[this.layer].buyables[this.id].base
+                totalCost = totalCost.mul(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+
+                //insert cost effects here
+
+                let polynomial = new Decimal(tmp[this.layer].buyables[this.id].exponentialBase)
+                polynomial = polynomial.pow(timesBought).sub(1)
+                polynomial = polynomial.div(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                totalCost = totalCost.mul(polynomial)
+                return [totalCost, timesBought]
+            },
+        },
+        141: {
+            base() {return new Decimal("1e6000")},
+            exponentialBase() {
+                let init = new Decimal("1e50")
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "<h2>14A</h2>",
+            display() {
+                return "+0.015 to the base of \"Tracking Error Detected.\" and \"Bond Strengthening\" per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "/" + tmp[this.layer].buyables[this.id].purchaseLimit + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost()) && getBuyableAmount(this.layer, 131).gte(10) && getBuyableAmount(this.layer, 132).gte(10) },
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("0.015")
                 let effect = base.mul(x)
                 return effect
             },
@@ -2084,18 +2406,29 @@ addLayer("bs", {
             name: "EXPERT+",
             challengeDescription: `EXPERT difficulty, and Weeks 1-2 of FNF upgrades (rows 1-2) don't work. ^0.001 ME. This challenge resets Cubes.`,
             goalDescription: function() {
-                if (challengeCompletions(this.layer, this.id) >= 5) return "<b>This difficulty has been fully completed."
-                return `Have ${format(tmp[this.layer].challenges[this.id].goal)} Cubes.`
+                if (challengeCompletions(this.layer, this.id) >= tmp[this.layer].challenges[this.id].completionLimit) return "<b>This difficulty has been fully completed."
+                return `Have ${format(tmp[this.layer].challenges[this.id].goal)} Songs.`
             },
-            rewardDescription: function() {return "x1e100 Distance and Movement, and x1e10 max stamina per completion.<br>Completions: " + challengeCompletions(this.layer, this.id) + "/" + tmp[this.layer].challenges[this.id].completionLimit },
-            rewardDisplay() {return `x${format(new Decimal("1e100").pow(challengeCompletions(this.layer, this.id)))} Distance/Movement, x${format(new Decimal("1e10").pow(challengeCompletions(this.layer, this.id)))} max Stamina`},
-            completionLimit: 5,
-            canComplete: function() {return player.bs.points.gte(tmp[this.layer].challenges[this.id].goal)},
+            rewardDescription: function() {
+                let extra = ""
+                if (hasUpgrade("bs", 81)) extra = " and +25% player health "
+                return "x1000 FP and x1e100 BS combo" + extra + "per completion.<br>Completions: " + challengeCompletions(this.layer, this.id) + "/" + tmp[this.layer].challenges[this.id].completionLimit
+            },
+            rewardDisplay() {
+                let extra = ``
+                if (hasUpgrade("bs", 81)) extra = `, +${format(new Decimal("25").mul(challengeCompletions(this.layer, this.id)))}% player health`
+                return `x${format(new Decimal("1000").pow(challengeCompletions(this.layer, this.id)))} FP, x${format(new Decimal("1e100").pow(challengeCompletions(this.layer, this.id)))} BS combo${extra}`
+            },
+            completionLimit: function() {
+                if (hasUpgrade("bs", 81)) return 10
+                return 5
+                },
+            canComplete: function() {return player.s.points.gte(tmp[this.layer].challenges[this.id].goal)},
             goal() {
-                let base = new Decimal("1e100")
-                base = base.pow(new Decimal(challengeCompletions(this.layer, this.id)).div(8).add(1))
+                let base = new Decimal("3900")
+                base = base.pow(new Decimal(challengeCompletions(this.layer, this.id)).div(50).add(1))
 
-                return base
+                return base.ceil()
             },
             unlocked() {return hasMilestone("fnf", 12)},
             style() {
@@ -2106,12 +2439,12 @@ addLayer("bs", {
                 if (maxedChallenge(this.layer, this.id)) return {
                     "width": "400px",
                     "height": "275px",
-                    "background": "#FF40FF",
+                    "background": "#0040FF",
                 }
                 return {
                     "width": "400px",
                     "height": "275px",
-                    "background": "#B000B0",
+                    "background": "#0000B0",
                 }
             },
             onEnter() {player.bs.points = new Decimal(0)},
@@ -2176,14 +2509,14 @@ addLayer("bs", {
 
         for (const id of [
             11, 21, 22, 31, 41, 42, 51, 52, 61, 62, 71, 72, 81, 82, 91, 92, 101, 111,
-            121, 122, 123
+            121, 122, 123, 131, 132, 141, 142
         ]) {
             if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
                 return "cyan"
             }
         }
         
-        for (const id of [11, 12, 21]) {
+        for (const id of [11, 12, 21, 22, 31]) {
             if (tmp[layer].challenges[id].canComplete && inChallenge(layer, id)) {
                 return "red"
             }
@@ -2195,7 +2528,7 @@ addLayer("bs", {
         let layer = "bs"
         for (const id of [
             11, 21, 22, 31, 41, 42, 51, 52, 61, 62, 71, 72, 81, 82, 91, 92, 101, 111,
-            121, 122, 123
+            121, 122, 123, 131, 132, 141, 142
         ]) {
             if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
                 return true
@@ -2209,6 +2542,7 @@ addLayer("bs", {
     tooltip() {
         text = format(player.bs.points) + " Cubes (+" + format(getResetGain("bs")) + " Cubes on reset)"
         if (!canReset(this.layer)) text = format(player.bs.points) + " Cubes (\"Mega Unlock\" needed to reset)"
+        else if (player.bs.points.gte(player.bs.softcap2Start)) text += `<br>[SECOND SOFTCAP - ${player.bs.softcap2Start}]`
         else if (player.bs.points.gte(player.bs.softcap1Start)) text += `<br>[FIRST SOFTCAP - ${player.bs.softcap1Start}]`
         return text
     },

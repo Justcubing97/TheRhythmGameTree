@@ -20,8 +20,10 @@ addLayer("ddrfc", {
     requires() {return new Decimal("1e15")},
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent() {
-        if (hasMilestone("fnf", 9)) return 2.85
-        return 3
+        let exp = new Decimal(3)
+        if (hasMilestone("fnf", 9)) exp = exp.sub(0.15)
+        if (hasUpgrade("bs", 82)) exp = exp.sub(0.1)
+        return exp
     }, // Prestige currency exponent
     base: 100,
     directMult() { // Calculate the multiplier for main currency from bonuses
@@ -29,6 +31,8 @@ addLayer("ddrfc", {
         let mult = new Decimal(1)
         //add
         //mul
+        layer = "fnf"
+        if (hasUpgrade(layer, 44)) mult = mult.mul(upgradeEffect(layer, 44))
         //exp 
         //other hypers
         //time dilations/chals
@@ -45,7 +49,7 @@ addLayer("ddrfc", {
     },
     resetsNothing() {return hasUpgrade("bs", 34)},
     autoPrestige() {return hasUpgrade("bs", 34) || hasMilestone("fnf", 2)},
-    canBuyMax() {return false},
+    canBuyMax() {return hasMilestone("tvc", 17)},
     doReset(resettingLayer) {
         // Stage 1, almost always needed, makes resetting this layer not delete your progress
         if (layers[resettingLayer].row <= this.row) return;
@@ -89,7 +93,13 @@ addLayer("ddrfc", {
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     if (player.ddrfc.points.gte(14)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e10 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x50 BS combo gain<br>x15,000 max Stamina<br>x1e10 Movement<br><br></h3>" +
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
-                    if (player.ddrfc.points.gte(23)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e60 DDR combo gain<br>x1e20 Arrows<br>x25 Cubes<br>x5e51 BS combo gain<br>x15,000 max Stamina<br>x1e10 Movement<br>^0.75 CFs<br><br></h3>" +
+                    if (player.ddrfc.points.gte(23)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e60 DDR combo gain (x1e50 after exponents)<br>x1e20 Arrows<br>x25 Cubes<br>x5e51 BS combo gain (x1e50 after exponents)<br>x15,000 max Stamina<br>x1e10 Movement<br>^0.75 CFs<br><br></h3>" +
+                                                    "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
+                    if (player.ddrfc.points.gte(32)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e60 DDR combo gain (x1e50 after exponents)<br>x1e20 Arrows<br>x25 Cubes<br>x5e51 BS combo gain (x1e50 after exponents)<br>x1.5e104 max Stamina<br>x1e10 Movement<br>^0.75 CFs<br></h3>" +
+                                                    "<h3>x1000 FP<br>x1000 GFXP<br><br></h3>" +
+                                                    "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
+                    if (player.ddrfc.points.gte(37)) text = "<h3>x1e260,325 ME<br>x1e50,120 Notes<br>x4,687,500 Songs<br>x25 M, G, and A arrows<br>x1e60 DDR combo gain (x1e50 after exponents)<br>x1e20 Arrows<br>x25 Cubes<br>x5e201 BS combo gain (x1e50 after exponents)<br>x1.5e104 max Stamina<br>x1e10 Movement<br>^0.75 CFs<br></h3>" +
+                                                    "<h3>x1000 FP<br>x1000 GFXP<br>x1e500 Cuts<br><br></h3>" +
                                                     "<h3>QoL: bulk-buy the DDR buyables.<br>QoL: passively generate 1% of the combo gained from Marvelous arrows.</h3>"
                     return text
                 }],
@@ -107,7 +117,10 @@ addLayer("ddrfc", {
                     if (player.ddrfc.points.gte(7)) text = "<h3>x1e250,000 ME (after third softcap)<br>x1e50,000 Notes (after second softcap)<br>x1,000,000 Songs<br>x1e15 Arrows (after first softcap)<br>x10 Cubes<br>x50 BS combo gain</h3>"
                     if (player.ddrfc.points.gte(8)) text = "<h3>At 11 FCTs: x15,000 max Stamina</h3>"
                     if (player.ddrfc.points.gte(11)) text = "<h3>At 14 FCTs: x1e10 Movement</h3>"
-                    if (player.ddrfc.points.gte(14)) text = "<h3>At 23 FCTs: x1e50 DDR and BS combo gain / ^0.75 all CFs</h3>"
+                    if (player.ddrfc.points.gte(14)) text = "<h3>At 23 FCTs: x1e50 DDR and BS combo gain (after exponents)<br>^0.75 all CFs</h3>"
+                    if (player.ddrfc.points.gte(23)) text = "<h3>At 32 FCTs: x1000 Funk Points and GFXP<br>x1e100 max Stamina</h3>"
+                    if (player.ddrfc.points.gte(32)) text = "<h3>At 37 FCTs: x1e500 Cuts and x1e150 BS combo</h3>"
+                    if (player.ddrfc.points.gte(37)) text = "<h3>Nothing!</h3>"
                     return text
                 }],
             ]

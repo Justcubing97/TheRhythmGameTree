@@ -707,7 +707,7 @@ addLayer("n", {
             effect() {
                 let base = player.n.quarter.add(1)
                 base = base.pow(0.01)
-                return base
+                return Decimal.min(base, new Decimal("1e150"))
             },
             effectDisplay() {return "x" + format(upgradeEffect(this.layer, this.id)) + " Songs"},
             description: "Quarter Notes boost Songs.",
@@ -749,7 +749,7 @@ addLayer("n", {
 
                 if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
 
-                return base
+                return Decimal.min(base, new Decimal("1e500"))
             },
             effectDisplay() {return "x" + format(upgradeEffect(this.layer, this.id)) + " Arrows"},
             description: "Eighth Notes boost Arrows after first softcap.",
@@ -789,7 +789,7 @@ addLayer("n", {
 
                 if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
 
-                return base
+                return Decimal.min(base, new Decimal("1e500"))
             },
             effectDisplay() {return "x" + format(upgradeEffect(this.layer, this.id)) + " Songs"},
             description: "Distance boosts Songs.",

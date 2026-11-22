@@ -9,7 +9,11 @@ addLayer("bsm", {
 
         combo: new Decimal(0),
         highestCombo: new Decimal(0),
-        cEffect: new Decimal(0),    
+        cEffect: new Decimal(0),
+
+        sacRequire: new Decimal("1e3000"),
+        sacExp: new Decimal(1),
+        sacExpGain: new Decimal(0),
 
         current: [],
         displayBlue: [],
@@ -41,6 +45,9 @@ addLayer("bsm", {
 
         let keptBuyables = []
 
+        let keptSacExp = player.bsm.sacExp
+        let keptSacReq = player.bsm.sacRequire
+        let keptSacExpGain = player.bsm.sacExpGain
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
 
@@ -48,6 +55,9 @@ addLayer("bsm", {
         layerDataReset(this.layer, keep);
 
         // Stage 5, add back in the specific subfeatures you saved earlier
+        player.bsm.sacRequire = keptSacReq
+        player.bsm.sacExp = keptSacExp
+        player.bsm.sacExpGain = keptSacExpGain
     }, //THANK YOU ESCAPEE FROM THE TMT SERVER
 
     findMults_BSM(type, arg){
@@ -65,6 +75,14 @@ addLayer("bsm", {
             if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
             if (hasChallenge("tvc", 31)) mult = mult.mul("1e50")
             if (hasMilestone("fnf", 13)) mult = mult.mul("1e1000")
+            mult = mult.mul(player.fnf.levelEffect3)
+            if (hasUpgrade("fnf", 43)) mult = mult.mul(upgradeEffect("fnf", 43))
+            if (player.ddrfc.points.gte(37)) mult = mult.mul("1e500")
+                
+            if (hasUpgrade("d", 131)) mult = mult.pow(1.05)
+            if (hasUpgrade("d", 132)) mult = mult.pow(1.04)
+            if (hasUpgrade("d", 133)) mult = mult.pow(1.03)
+            if (hasUpgrade("d", 134)) mult = mult.pow(1.02)
 
             return mult
         }
@@ -79,8 +97,13 @@ addLayer("bsm", {
                 
             if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
             if (hasChallenge("tvc", 31)) mult = mult.mul("1e50")
+            mult = mult.mul(player.fnf.levelEffect3)
             
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
+            if (hasUpgrade("d", 131)) mult = mult.pow(1.05)
+            if (hasUpgrade("d", 132)) mult = mult.pow(1.04)
+            if (hasUpgrade("d", 133)) mult = mult.pow(1.03)
+            if (hasUpgrade("d", 134)) mult = mult.pow(1.02)
 
             return mult
         }
@@ -103,11 +126,19 @@ addLayer("bsm", {
             if (hasMilestone("tvc", 7)) mult = mult.mul(player.tvc.effect)
             if (hasMilestone("fnf", 6)) mult = mult.mul(player.bs.levelEffect)
             if (hasChallenge("tvc", 32)) mult = mult.mul("1e100")
+            mult = mult.mul(player.fnf.levelEffect2)
+            mult = mult.mul(new Decimal("1e100").pow(challengeCompletions(layer, 31)))
+            if (player.ddrfc.points.gte(37)) mult = mult.mul("1e150")
 
             if (hasUpgrade("ddr", 51)) mult = mult.pow(upgradeEffect("ddr", 51))
             if (hasUpgrade("d", 74)) mult = mult.pow(1.25)
+            mult = mult.pow(player.bsm.sacExp)
+            if (hasUpgrade("d", 131)) mult = mult.pow(1.05)
+            if (hasUpgrade("d", 132)) mult = mult.pow(1.04)
+            if (hasUpgrade("d", 133)) mult = mult.pow(1.03)
+            if (hasUpgrade("d", 134)) mult = mult.pow(1.02)
+
             if (player.ddrfc.points.gte(23)) mult = mult.mul("1e50")
-                
             if (hasUpgrade("fnf", 22)) mult = mult.mul(upgradeEffect("fnf", 22))
             
             if (arg == "c"){
@@ -121,6 +152,7 @@ addLayer("bsm", {
     },
 
     findClicks_BSM(dir){
+        if (inChallenge("fnf", 12)) return;
         let block = player.bsm.current[0]
         if (!block) return;
         if (block[2] <= 3) return;
@@ -698,6 +730,21 @@ addLayer("bsm", {
                 }
             }
         },
+        101: {
+            title: "Sacrifice",
+            canClick() {return player.bsm.sacExpGain.gt(0)},
+            onClick() {
+                doReset("fnf", true)
+                player.bsm.sacExp = player.bsm.sacExp.add(player.bsm.sacExpGain)
+            },
+            style() {
+                return {
+                    "width": "120px",
+                    "height": "120px",
+                }
+            },
+            unlocked() {return hasMilestone("fnf", 15)}
+        },
     },
 
     update(diff){
@@ -746,6 +793,7 @@ addLayer("bsm", {
             if (hasUpgrade("d", 44)) mult = mult.pow(2)
             if (hasChallenge("tvc", 31)) mult = mult.pow(mult.add(1).log(10).add(1).log(10))
 
+            if (inChallenge("fnf", 12)) mult = new Decimal(1)
             player.bsm.cutEffect = mult
             //=====
             mult = player.bsm.bad.add(1).pow(100)
@@ -757,6 +805,7 @@ addLayer("bsm", {
             if (hasUpgrade("ddr", 54)) mult = mult.pow(25)
             if (hasChallenge("tvc", 12)) mult = mult.pow(mult.add(1).log(10).add(1).log(10))
 
+            if (inChallenge("fnf", 12)) mult = new Decimal(1)
             player.bsm.badEffect = mult
             //=====
             mult = player.bsm.highestCombo.add(1).pow(0.25)
@@ -766,14 +815,31 @@ addLayer("bsm", {
             if (hasMilestone("fnf", 13)) mult = mult.mul("1e50")
             if (hasUpgrade("ddr", 54)) mult = mult.pow(1.5)
 
+            if (inChallenge("fnf", 12)) mult = new Decimal(1)
             player.bsm.cEffect = mult
 
             //automation
             if (hasChallenge("tvc", 21) || hasMilestone("fnf", 2)){
-                player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c").mul(5).mul(diff))
-                player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5).mul(diff))
-                player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5).mul(diff))
+                if (inChallenge("fnf", 12)){ //use if you dont wanna gain bsm resources
+
+                } else {
+                    player.bsm.points = player.bsm.points.add(tmp.bsm.findMults_BSM("c", "c").mul(5).mul(diff))
+                    player.bsm.bad = player.bsm.bad.add(tmp.bsm.findMults_BSM("b", "b").mul(5).mul(diff))
+                    player.bsm.combo = player.bsm.combo.add(tmp.bsm.findMults_BSM("o", "c").mul(5).mul(diff))
+                }
             }
+        }
+
+        //sacrifice
+        if (hasMilestone("fnf", 15)){
+            mult = new Decimal("1e3000")
+            player.bsm.sacRequire = Decimal.max(Decimal.max(player.bsm.sacRequire, mult), player.bsm.points)
+
+            let divFactor = new Decimal(75)
+
+            if (hasChallenge("fnf", 12)) divFactor = divFactor.sub(10)
+
+            player.bsm.sacExpGain = Decimal.max(0, player.bsm.sacRequire.div(mult).log(10).pow(0.1).div(divFactor).add(1).sub(player.bsm.sacExp))
         }
     },
 
@@ -794,6 +860,16 @@ addLayer("bsm", {
         ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 41], ["clickable", 42], ["clickable", 43]]],
         ["row", [["clickable", 21], ["clickable", 22], ["clickable", 23], ["clickable", 51], ["clickable", 52], ["clickable", 53]]],
         ["row", [["clickable", 31], ["clickable", 32], ["clickable", 33], ["clickable", 61], ["clickable", 62], ["clickable", 63]]],
+        "blank",
+        ["display-text", function(){if (hasMilestone("fnf", 15)) return `<h2>Saber Sacrifice</h2>`}],
+        ["display-text", function(){if (hasMilestone("fnf", 15)) return `You have an SS exponent of ^${format(player.bsm.sacExp, 6)}`}],
+        ["display-text", function(){if (hasMilestone("fnf", 15)) return `You need ${format(player.bsm.sacRequire)} Cuts to sacrifice`}],
+        ["display-text", function(){if (hasMilestone("fnf", 15)) return `You will gain +${format(player.bsm.sacExpGain, 6)} SS exponent on this sacrifice`}],
+        "blank",
+        ["clickable", 101],
+        "blank",
+        ["display-text", function(){if (hasMilestone("fnf", 15)) return `SS exponent boosts Songs, Cubes after softcap, BS combo, and GFXP.`}],
+        "blank",
     ],
 
     infoboxes: {

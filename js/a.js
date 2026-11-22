@@ -183,7 +183,7 @@ addLayer("a", {
             name: "DanceDance-Upgrade",
             done() {return hasUpgrade("ddr", 54)},
             unlocked() {return true},
-            tooltip() {return "Have 20 DDR upgrades. +5 AP / Row completion bonus: x1e10 Movement and max Stamina is always at least 1e50."},
+            tooltip() {return "Have 20 DDR upgrades. +5 AP / Row completion bonus: x1e10 Movement and max Stamina is always at least 1e50. Songs NEVER reset."},
             onComplete() {player.a.points = player.a.points.add(5)}
         },
         51: {
@@ -240,6 +240,41 @@ addLayer("a", {
             done() {return player.d.maxStamina.gte("1.79e308")},
             unlocked() {return true},
             tooltip() {return "Have 1.79e308 max Stamina. Your persistence is literally infinite. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        63: {
+            name: "Being Supportive",
+            done() {return player.fnf.level.gte("5")},
+            unlocked() {return true},
+            tooltip() {return "Have your girlfriend at level 5. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        64: {
+            name: "A Worthy Sacrifice",
+            done() {return player.bsm.sacExp.gte("1.01")},
+            unlocked() {return true},
+            tooltip() {return "Have a Saber Sacrifice exponent of ^1.01. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        65: {
+            name: "Dance Grandmaster",
+            done() {return player.ddr.points.gte("1e20000")},
+            unlocked() {return true},
+            tooltip() {return "Have 1e20,000 Arrows. +25 AP"},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        66: {
+            name: "Saber Sensei",
+            done() {return maxedChallenge("bs", 31)},
+            unlocked() {return true},
+            tooltip() {return "Fully complete EXPERT+ Beat Saber difficulty. +25 AP / Square completion bonus: Improve Distance Gigameter upgrades and +95% max player health."},
+            onComplete() {player.a.points = player.a.points.add(25)}
+        },
+        71: {
+            name: "I don't like her complicated, though.",
+            done() {return hasUpgrade("bs", 82)},
+            unlocked() {return true},
+            tooltip() {return "Buy \"Anti-Scaling\". Complicated girls are hard to deal with sometimes. +25 AP"},
             onComplete() {player.a.points = player.a.points.add(25)}
         },
     },

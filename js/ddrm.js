@@ -83,6 +83,8 @@ addLayer("ddrm", {
 
             if (mult.gte(player[layer].softcap1Start)) mult = mult.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
             if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
+                
+            if (hasUpgrade("fnf", 42)) mult = mult.pow(upgradeEffect("fnf", 42))
             return mult
         }
         if (type == "g"){
@@ -95,6 +97,8 @@ addLayer("ddrm", {
 
             if (mult.gte(player[layer].softcap1Start)) mult = mult.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
             if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
+                
+            if (hasUpgrade("fnf", 42)) mult = mult.pow(upgradeEffect("fnf", 42))
             return mult
         }
         if (type == "a"){
@@ -108,6 +112,9 @@ addLayer("ddrm", {
                 
             if (mult.gte(player[layer].softcap1Start)) mult = mult.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
             if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
+                
+            if (hasUpgrade("fnf", 42)) mult = mult.pow(upgradeEffect("fnf", 42))
+
             return mult
         }
         if (type == "c"){
@@ -134,6 +141,7 @@ addLayer("ddrm", {
             
             let softcap = new Decimal(0.1)
             let softcapStart = new Decimal("1e500")
+            if (hasUpgrade("fnf", 33)) softcapStart = softcapStart.mul(upgradeEffect("fnf", 33))
             if (mult.gte(softcapStart)) mult = mult.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap)))
 
             //specifics
@@ -487,15 +495,19 @@ addLayer("ddrm", {
             if (hasAchievement("a", 56)) mult = mult.add(0.05)
             mult = mult.add(buyableEffect("bs", 123))
             if (hasMilestone("fnf", 11)) mult = mult.add(0.5)
+            if (hasMilestone("s", 17)) mult = mult.add(0.5)
+            if (hasAchievement("a", 66)) mult = mult.add(0.95)
+            if (hasUpgrade("bs", 81)) mult = mult.add(new Decimal(0.25).mul(challengeCompletions("bs", 31)))
 
             player.ddrm.maxHealth = mult
 
             if (Math.random() > 0.99) player.ddrm.health = Decimal.max(new Decimal(0), player.ddrm.health.sub(0.01))
         }
 
+        //softcaps
         let mult = new Decimal(0.05)
 
-        if (hasMilestone("tvc", 13)) mult = new Decimal(0.25)
+        if (hasMilestone("tvc", 14)) mult = new Decimal(0.25)
         
         player.ddrm.softcap2 = mult
     },

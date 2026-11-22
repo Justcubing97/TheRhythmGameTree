@@ -67,16 +67,23 @@ addLayer("s", {
         if (hasUpgrade(layer, 83)) mult = mult.mul("1e70")
         if (hasUpgrade(layer, 84)) mult = mult.mul("1e80")
 
+        layer = "tvc"
+        if (hasMilestone(layer, 16)) mult = mult.mul("1e100")
+        if (hasMilestone(layer, 17)) mult = mult.mul(player.tvc.points.add(1).log(1.01).add(1).pow(10))
+
         layer = "fnf"
         if (hasMilestone(layer, 1)) mult = mult.mul("1e10")
         if (hasMilestone(layer, 4)) mult = mult.mul("1e50")
+        if (hasUpgrade(layer, 32)) mult = mult.mul(upgradeEffect(layer, 32))
         //exp
         layer = "tvc"
-        if (hasMilestone(layer, 13)) mult = mult.pow(1.025)
+        if (hasMilestone(layer, 14)) mult = mult.pow(1.025)
 
         layer = "bs"
         if (hasUpgrade(layer, 22)) mult = mult.pow(1.15)
         if (inChallenge(layer, 12)) mult = mult.pow(0.05)
+
+        mult = mult.pow(player.bsm.sacExp)
 
         layer = "d"
         if (hasUpgrade(layer, 111)) mult = mult.pow(1.01)
@@ -102,7 +109,7 @@ addLayer("s", {
         if (player.n.points.gte("1e20")) player.s.unlocked = true
         return player.n.points.gte("1e20") || player.s.unlocked
     },
-    resetsNothing() {return hasUpgrade("ddr", 43) && !player.s.resetting},
+    resetsNothing() {return (hasUpgrade("ddr", 43) && !player.s.resetting) || hasAchievement("a", 46)},
     autoPrestige() {return hasUpgrade("ddr", 44) || hasUpgrade("bs", 24) || hasMilestone("fnf", 2)},
     resetDescription: "Compose ",
     canBuyMax() {return hasMilestone(this.layer, 1) || hasUpgrade("ddr", 12) || hasUpgrade("bs", 11)},
@@ -408,6 +415,12 @@ addLayer("s", {
             requirementDescription: "16: 1e500 Songs",
             effectDescription: "Toxic Violet Cubes is a Camellia song made for BSWC2021. It is track 4 in his album \"REX\". Therefore, x1e15 TVC.",
             done() { return player.s.points.gte("1e500") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) },
+        },
+        17: {
+            requirementDescription: "17: 1e1600 Songs",
+            effectDescription: "GOOD GRIEF WHAT THE F- +50% max player health and x100,000,000 GFXP.",
+            done() { return player.s.points.gte("1e1600") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) },
         },
     },

@@ -43,9 +43,11 @@ addLayer("d", {
         layer = "d"
         mult = mult.mul(buyableEffect(layer, 13))
         
-        if (hasUpgrade("d", 71)) mult = mult.mul(25)
-        if (hasUpgrade("d", 72)) mult = mult.mul(20)
-        if (hasUpgrade("d", 73)) mult = mult.mul(15)
+        if (hasUpgrade(layer, 71)) mult = mult.mul(25)
+        if (hasUpgrade(layer, 72)) mult = mult.mul(20)
+        if (hasUpgrade(layer, 73)) mult = mult.mul(15)
+            
+        if (hasUpgrade(layer, 144)) mult = mult.mul(upgradeEffect(layer, 144))
 
         layer = "tvc"
         if (hasChallenge(layer, 33)) mult = mult.mul("1e33")
@@ -53,6 +55,8 @@ addLayer("d", {
         layer = "fnf"
         if (hasMilestone(layer, 1)) mult = mult.mul("1e10")
         if (hasUpgrade(layer, 21)) mult = mult.mul(upgradeEffect(layer, 21))
+            
+        mult = mult.mul(player.fnf.levelEffect1)
         //exp 
         layer = "bs"
         mult = mult.pow(buyableEffect(layer, 121))
@@ -96,9 +100,23 @@ addLayer("d", {
             61, 62, 63, 64,
             71, 72, 73, 74
         ]
+        
+        if (hasMilestone("fnf", 7)) keptUpgrades.push(
+            81, 82, 83, 84,
+            91, 92, 93, 94,
+            101, 102, 103, 104,
+            111, 112, 113, 114,
+            121, 122, 123, 124,
+            131, 132, 133, 134,
+        )
+        
+        if (hasChallenge("fnf", 21)) keptUpgrades.push(
+            141, 142, 143, 144
+        )
 
         let keptBuyables = []
         if (hasMilestone("fnf", 4)) keptBuyables.push(getBuyableAmount(this.layer, 11), getBuyableAmount(this.layer, 12), getBuyableAmount(this.layer, 13))
+        if (hasMilestone("fnf", 16)) keptBuyables.push(getBuyableAmount(this.layer, 21))
 
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
@@ -111,6 +129,7 @@ addLayer("d", {
             setBuyableAmount(this.layer, 11, keptBuyables[0])
             setBuyableAmount(this.layer, 12, keptBuyables[1])
             setBuyableAmount(this.layer, 13, keptBuyables[2])
+            setBuyableAmount(this.layer, 21, keptBuyables[3])
         }
         
         player[this.layer].upgrades.push(...keptUpgrades)
@@ -170,10 +189,12 @@ addLayer("d", {
         if (hasUpgrade("fnf", 24)) mult = mult.mul(upgradeEffect("fnf", 24))
         if (hasUpgrade("fnf", 21)) mult = mult.mul(upgradeEffect("fnf", 21))
         if (hasMilestone("tvc", 13)) mult = mult.mul(player.tvc.effect)
-            
         mult = mult.mul(new Decimal("1e100").pow(challengeCompletions("bs", 22)))
             
+        //exponnets
         mult = mult.pow(buyableEffect("bs", 121))
+        
+        if (hasChallenge("fnf", 12)) mult = mult.pow(player.bsm.sacExp)
         
         return mult //this returns movement
     },
@@ -599,7 +620,7 @@ addLayer("d", {
                 return base
 
             },
-            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id)) + " ME"},
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
             description: "Movement boosts Notes after third softcap and Femtometer 1-4's effect.",
             cost: new Decimal("1e925"),
             currencyDisplayName: "Movement",
@@ -711,6 +732,175 @@ addLayer("d", {
             currencyInternalName: "movement",
             currencyLayer: "d",
             unlocked() {return hasUpgrade("d", 104)},
+        },
+        
+        121: {
+            title: "Kilometer 1 (10<sup>3</sup>)",
+            description: "x100 FP and x25 GFXP.",
+            cost: new Decimal("1e2600"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 114)},
+        },
+        122: {
+            title: "Kilometer 2 (10<sup>3</sup>)",
+            description: "x150 FP and x50 GFXP.",
+            cost: new Decimal("1e2650"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 114)},
+        },
+        123: {
+            title: "Kilometer 3 (10<sup>3</sup>)",
+            description: "x200 FP and x75 GFXP.",
+            cost: new Decimal("1e2700"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 114)},
+        },
+        124: {
+            title: "Kilometer 4 (10<sup>3</sup>)",
+            description: "x250 FP and x100 GFXP.",
+            cost: new Decimal("1e2750"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 114)},
+        },
+        131: {
+            title: "Megameter 1 (10<sup>6</sup>)",
+            description: "^1.05 Cuts, Bad Cuts, and BS combo.",
+            cost: new Decimal("1e3100"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 124)},
+        },
+        132: {
+            title: "Megameter 2 (10<sup>6</sup>)",
+            description: "^1.04 Cuts, Bad Cuts, and BS combo.",
+            cost: new Decimal("1e3200"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 124)},
+        },
+        133: {
+            title: "Megameter 3 (10<sup>6</sup>)",
+            description: "^1.03 Cuts, Bad Cuts, and BS combo.",
+            cost: new Decimal("1e3300"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 124)},
+        },
+        134: {
+            title: "Megameter 4 (10<sup>6</sup>)",
+            description: "^1.02 Cuts, Bad Cuts, and BS combo.",
+            cost: new Decimal("1e3400"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 124)},
+        },
+        
+        141: {
+            title: "Gigameter 1 (10<sup>9</sup>)",
+            effect(){
+                let base = player.d.movement.add(1)
+                base = base.pow(0.001)
+
+                if (hasAchievement("a", 36)) base = base.pow(1.5)
+
+                let softcap = new Decimal(0.5)
+                let softcapStart = new Decimal("1e10")
+
+                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                return base
+
+            },
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
+            description: "Movement boosts GFXP.",
+            cost: new Decimal("1e4000"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 134)},
+        },
+        
+        142: {
+            title: "Gigameter 2 (10<sup>9</sup>)",
+            effect(){
+                let base = player.d.movement.add(1)
+                base = base.pow(0.0008)
+
+                if (hasAchievement("a", 36)) base = base.pow(1.5)
+
+                let softcap = new Decimal(0.5)
+                let softcapStart = new Decimal("1e10")
+
+                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                return base
+
+            },
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
+            description: "Movement boosts GFXP.",
+            cost: new Decimal("1e4500"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 134)},
+        },
+        
+        143: {
+            title: "Gigameter 3 (10<sup>9</sup>)",
+            effect(){
+                let base = player.d.movement.add(1)
+                base = base.pow(0.0006)
+
+                if (hasAchievement("a", 36)) base = base.pow(1.5)
+
+                let softcap = new Decimal(0.5)
+                let softcapStart = new Decimal("1e10")
+
+                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                return base
+
+            },
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
+            description: "Movement boosts GFXP.",
+            cost: new Decimal("1e5000"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 134)},
+        },
+        
+        144: {
+            title: "Gigameter 4 (10<sup>9</sup>)",
+            effect(){
+                let base = player.d.movement.add(1)
+                base = base.pow(0.005)
+
+                if (hasAchievement("a", 36)) base = base.pow(10)
+
+                let softcap = new Decimal(0.25)
+                let softcapStart = new Decimal("1e50")
+
+                if (base.gte(softcapStart)) base = base.pow(softcap).mul(new Decimal(softcapStart).pow(decimalOne.sub(softcap))) //softcap
+                return base
+
+            },
+            effectDisplay(){ return "x" + format(upgradeEffect(this.layer, this.id))},
+            description: "Movement boosts Distance. This one's different!",
+            cost: new Decimal("1e5500"),
+            currencyDisplayName: "Movement",
+            currencyInternalName: "movement",
+            currencyLayer: "d",
+            unlocked() {return hasUpgrade("d", 134)},
         },
     },
 
@@ -914,6 +1104,68 @@ addLayer("d", {
                 return [totalCost, timesBought]
             },
         },
+        21: {
+            base() {return new Decimal("1e1750")},
+            exponentialBase() {
+                let init = new Decimal("1e50")
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "Miracle Cubes",
+            display() {
+                return "x1e10 Cubes and TVC after softcap per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: x" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost()) },
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("1e10")
+                let effect = base.pow(x)
+                return effect
+            },
+            style() {
+                return {
+                    "height": "100px"
+                }
+            },
+            unlocked() {return hasMilestone("fnf", 16)},
+            buyMax() {
+                let timesBought = player.d.points
+                //insert cost effects here
+
+                timesBought = timesBought.mul(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].base)
+                timesBought = timesBought.div(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+                timesBought = timesBought.add(1).log(tmp[this.layer].buyables[this.id].exponentialBase)
+                timesBought = timesBought.floor()
+
+                let totalCost = tmp[this.layer].buyables[this.id].base
+                totalCost = totalCost.mul(tmp[this.layer].buyables[this.id].exponentialBase.pow(getBuyableAmount(this.layer, this.id)))
+
+                //insert cost effects here
+
+                let polynomial = new Decimal(tmp[this.layer].buyables[this.id].exponentialBase)
+                polynomial = polynomial.pow(timesBought).sub(1)
+                polynomial = polynomial.div(tmp[this.layer].buyables[this.id].exponentialBase.sub(1))
+                totalCost = totalCost.mul(polynomial)
+                return [totalCost, timesBought]
+            },
+        },
     },
 
     challenges: {
@@ -1000,6 +1252,7 @@ addLayer("d", {
         if (player.ddrfc.points.gte(11)) mult = mult.mul(15000)
         if (hasUpgrade("bs", 52)) mult = mult.mul(upgradeEffect("bs", 52))
         if (hasChallenge("tvc", 33)) mult = mult.mul("1e10")
+        if (player.ddrfc.points.gte(32)) mult = mult.mul("1e100")
             
         mult = mult.mul(new Decimal("1e10").pow(challengeCompletions("bs", 22)))
         
@@ -1072,5 +1325,50 @@ addLayer("d", {
     },
     branches: [["fnf", 1]],
 
-    tooltip() {return format(player.d.points) + " Distance (+" + format(getResetGain("d")) + " Distance on reset)"},
+    glowColor() {
+        let layer = "d"
+        for (id in tmp[layer].upgrades){
+            if (isPlainObject(layers[layer].upgrades[id])){
+                if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked){
+                    return "red"
+                }
+            }
+        }
+
+        for (const id of [
+            11, 12, 13, 21
+        ]) {
+            if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
+                return "cyan"
+            }
+        }
+
+        return ""
+    },
+    shouldNotify() {
+        let layer = "d"
+        for (const id of [
+            11, 12, 13, 21
+        ]) {
+            if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
+                return true
+            }
+        }
+        return false
+    },
+    automate() {
+        let layer = "d"
+        for (const id of [11, 12]) {
+            if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
+                if (hasMilestone("fnf", 2))
+                tmp[layer].buyables[id].buy()
+            }
+        }
+    },
+
+    tooltip() {
+        let text = format(player.d.points) + " Distance (+" + format(getResetGain("d")) + " Distance on reset)"
+        if (player.d.points.gte(player.d.softcap1Start)) text += `<br>[FIRST SOFTCAP - ${format(player.d.softcap1Start)}]`
+        return text
+    },
 })

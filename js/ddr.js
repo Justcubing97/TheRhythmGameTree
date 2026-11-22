@@ -123,6 +123,7 @@ addLayer("ddr", {
         if (mult.gte(player[layer].softcap2Start)) mult = mult.pow(player[layer].softcap2).mul(new Decimal(player[layer].softcap2Start).pow(decimalOne.sub(player[layer].softcap2)))
             
         if (hasChallenge("tvc", 13)) mult = mult.mul("1e200")
+        mult = mult.mul(buyableEffect("bs", 142))
             
         if (hasMilestone("fnf", 13)) mult = mult.pow(1.05)
 
@@ -171,6 +172,9 @@ addLayer("ddr", {
         keptBars.freeze = player.ddr.freeze
         keptBars.chaos = player.ddr.chaos
 
+        let keptBuyables = []
+        if (hasUpgrade("bs", 13)) keptBuyables.push(getBuyableAmount(this.layer, 22))
+
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
         if (hasUpgrade("bs", 14)) keep.push("milestones")
@@ -187,6 +191,8 @@ addLayer("ddr", {
         player.ddr.air = keptBars.air
         player.ddr.freeze = keptBars.freeze
         player.ddr.chaos = keptBars.chaos
+        
+        if (hasUpgrade("bs", 13)) setBuyableAmount(this.layer, 22, keptBuyables[0])
     }, //THANK YOU ESCAPEE FROM THE TMT SERVER
     upgrades: {
         11: {
@@ -315,7 +321,8 @@ addLayer("ddr", {
             effect() {
                 let base = player.ddr.points.add(1)
                 base = base.pow(0.00005)
-                return base
+
+                return Decimal.min(base, 10)
             },
             effectDisplay() {
                 let text = "^" + format(upgradeEffect(this.layer, this.id)) + " to BS combo and Bad Cuts"
@@ -439,6 +446,12 @@ addLayer("ddr", {
             done() { return player.ddr.groovePower.gte("1e2500") },
             unlocked() { return hasMilestone(this.layer, this.id - 1)},
         },
+        15: {
+            requirementDescription: "15: 1e2670 Groove Power",
+            effectDescription: "Deceptive little milestone... rework the Groove Power formula.",
+            done() { return player.ddr.groovePower.gte("1e2670") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1)},
+        },
     },
 
     buyables: {
@@ -468,7 +481,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -527,7 +540,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -587,7 +600,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -647,7 +660,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -706,7 +719,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
 
                 addBuyables(this.layer, 11, new Decimal(5))
@@ -776,7 +789,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -836,7 +849,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -896,7 +909,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -956,7 +969,7 @@ addLayer("ddr", {
                     setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(amount), tmp[this.layer].buyables[this.id].purchaseLimit))
                 } else {
                     player[this.layer].points = player[this.layer].points.sub(this.cost())
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    setBuyableAmount(this.layer, this.id, Decimal.min(getBuyableAmount(this.layer, this.id).add(1), tmp[this.layer].buyables[this.id].purchaseLimit))
                 }
             },
             effect(x) {
@@ -1401,7 +1414,14 @@ addLayer("ddr", {
         //groove power
         let mult = new Decimal(0)
         if (player.points.gte(player.ddr.gpThreshold) && (player.ddr.stream.neq(1) || player.ddr.voltage.neq(1))) mult = mult.add(1)
-        mult = mult.mul(player.points.add(1).log(10).div(5))
+        if (hasMilestone("ddr", 15)){
+            let numberOfValues = new Decimal(0)
+            numberOfValues = numberOfValues.add(player.ddr.stream.log(player.ddr.streamImpact).div("1e8"))
+            numberOfValues = numberOfValues.add(player.ddr.voltage.log(1.2).div("-1e6"))
+            numberOfValues = numberOfValues.add(player.ddr.air.log(100).div("1e4"))
+            mult = mult.mul(player.points.add(1).pow(numberOfValues))
+        }
+        else mult = mult.mul(player.points.add(1).log(10).div(5))
 
         //[]MultBoost
         let mb = new Decimal(10)
@@ -1423,8 +1443,8 @@ addLayer("ddr", {
         if (hasUpgrade("s", 32)) mult = mult.mul("1e10")
         if (hasChallenge("s", 12)) mult = mult.mul("1e15")
         mult = mult.mul(buyableEffect("ddr", 12))
-    
         if (hasUpgrade("bs", 51)) mult = mult.mul(upgradeEffect("bs", 51))
+        if (hasMilestone("fnf", 16)) mult = mult.mul("1e100")
 
         player.ddr.gpg = mult
 
@@ -1493,7 +1513,7 @@ addLayer("ddr", {
     },
     automate() {
         let layer = "ddr"
-        for (const id of [11, 12, 13, 21, 22, 23, 31, 32, 33]) {
+        for (const id of [22, 11, 12, 13, 21, 23, 31, 32, 33]) {
             if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
                 if (hasUpgrade("s", 43) || hasUpgrade("bs", 13))
                 tmp[layer].buyables[id].buy()

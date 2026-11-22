@@ -53,8 +53,11 @@ addLayer("tvc", {
         layer = "fnf"
         if (hasMilestone(layer, 1)) mult = mult.mul("1e10")
         if (hasMilestone(layer, 8)) mult = mult.mul(player.ddrm.aEffect)
+
+        mult = mult.mul(player.fnf.levelEffect1)
         //exp 
         mult = mult.pow(buyableEffect(this.layer, 22))
+        mult = mult.pow(buyableEffect("bs", 131))
         if (hasMilestone(this.layer, 12)) mult = mult.pow(1.15)
         
         if (inChallenge(this.layer, 13)) mult = mult.pow(0.01)
@@ -74,6 +77,8 @@ addLayer("tvc", {
 
         if (gain.gte(player[layer].softcap1Start)) gain = gain.pow(player[layer].softcap1).mul(new Decimal(player[layer].softcap1Start).pow(decimalOne.sub(player[layer].softcap1)))
         //put after first softcap things after this line
+        gain = gain.mul(buyableEffect("d", 21))
+
         if (hasUpgrade("d", 111)) gain = gain.pow(1.01)
         if (hasUpgrade("d", 112)) gain = gain.pow(1.02)
         if (hasUpgrade("d", 113)) gain = gain.pow(1.03)
@@ -97,6 +102,7 @@ addLayer("tvc", {
 
         let keptBuyables = []
         if (hasMilestone("fnf", 4)) keptBuyables.push(getBuyableAmount(this.layer, 11), getBuyableAmount(this.layer, 12), getBuyableAmount(this.layer, 21), getBuyableAmount(this.layer, 22))
+        keptBuyables.push(getBuyableAmount(this.layer, 32))
 
         let keptChallenges = []
         if (hasMilestone("fnf", 4)) keptChallenges.push(11, 12, 21, 22)
@@ -117,6 +123,7 @@ addLayer("tvc", {
             setBuyableAmount(this.layer, 12, keptBuyables[1])
             setBuyableAmount(this.layer, 21, keptBuyables[2])
             setBuyableAmount(this.layer, 22, keptBuyables[3])
+            setBuyableAmount(this.layer, 32, keptBuyables[4])
         }
     }, //THANK YOU ESCAPEE FROM THE TMT SERVER
     tabFormat: {
@@ -226,9 +233,27 @@ addLayer("tvc", {
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
         14: {
-            requirementDescription: "13: 1e1385 Toxic Violet Cubes",
+            requirementDescription: "14: 1e1385 Toxic Violet Cubes",
             effectDescription: "Weaken the second softcap of DDR Minigame Arrow gains. ^1.025 Songs.",
             done() { return player.tvc.points.gte("1e1385") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        15: {
+            requirementDescription: "15: 1e2175 Toxic Violet Cubes",
+            effectDescription: "Weaken the first ME softcap and unlock the 4th week of FNF upgrades. Unlock an effect of Girlfriend Level.",
+            done() { return player.tvc.points.gte("1e2175") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        16: {
+            requirementDescription: "16: 1e4000 Toxic Violet Cubes",
+            effectDescription: "The third effect of Girlfriend Level is stronger. x1e100 Songs and GP.",
+            done() { return player.tvc.points.gte("1e4000") },
+            unlocked() { return hasMilestone(this.layer, this.id - 1) }
+        },
+        17: {
+            requirementDescription: "17: 1e4320 Toxic Violet Cubes",
+            effectDescription: "TVC boosts GFXP and Songs, and reset for as many FCTs as you can.",
+            done() { return player.tvc.points.gte("1e4320") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
     },
@@ -264,7 +289,7 @@ addLayer("tvc", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
-                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    if (!hasChallenge("fnf", 11)) player[this.layer].points = player[this.layer].points.sub(this.cost())
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
@@ -312,7 +337,7 @@ addLayer("tvc", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
-                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    if (!hasChallenge("fnf", 11)) player[this.layer].points = player[this.layer].points.sub(this.cost())
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
@@ -360,7 +385,7 @@ addLayer("tvc", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
-                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    if (!hasChallenge("fnf", 11)) player[this.layer].points = player[this.layer].points.sub(this.cost())
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
@@ -368,6 +393,9 @@ addLayer("tvc", {
                 let base = new Decimal("0.1")
 
                 let effect = base.mul(x)
+
+                effect = effect.pow(buyableEffect("tvc", 32))
+
                 return effect
             },
             unlocked() {return hasMilestone("tvc", 11)},
@@ -406,7 +434,7 @@ addLayer("tvc", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
-                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    if (!hasChallenge("fnf", 11)) player[this.layer].points = player[this.layer].points.sub(this.cost())
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
@@ -414,6 +442,9 @@ addLayer("tvc", {
                 let base = new Decimal("1.01")
 
                 let effect = base.pow(x)
+
+                effect = effect.pow(buyableEffect("tvc", 32))
+
                 return effect
             },
             unlocked() {return hasMilestone("tvc", 11)},
@@ -449,7 +480,7 @@ addLayer("tvc", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
                 } else {
-                    player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    if (!hasChallenge("fnf", 11)) player[this.layer].points = player[this.layer].points.sub(this.cost())
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
@@ -460,6 +491,50 @@ addLayer("tvc", {
                 return effect
             },
             unlocked() {return hasMilestone("tvc", 13)},
+            buyMax() {
+                
+            },
+        },
+        32: {
+            base() {return new Decimal("5e3899")},
+            exponentialBase() {
+                let init = new Decimal("1e10")
+                init = init.pow(getBuyableAmount(this.layer, this.id).pow(6).add(1))
+                return init
+            },
+            cost(x) {
+                let base = tmp[this.layer].buyables[this.id].base
+                let expbase = tmp[this.layer].buyables[this.id].exponentialBase
+                let multi = new Decimal(expbase).pow(x)
+
+                let final = base.mul(multi)
+                final = final.mul(x.pow(x.div(1.75).pow(1.1)).add(1))
+                return final //if you add anything to the cost formula, make sure to update the buymax()!
+            },
+            title: "Tracking Error Detected.",
+            display() {
+                return "Raise the effects of the 3rd and 4th buyables ^1.01 per purchase." + "\n" + "Bought: " + getBuyableAmount(this.layer, this.id) + "\n" + "Cost: " + format(this.cost()) + "\n" + "Effect: ^" + format(this.effect())
+            },
+            canAfford() { return player[this.layer].points.gte(this.cost())},
+            buy() {
+                if (false){
+                    let cost = tmp[this.layer].buyables[this.id].buyMax()[0]
+                    let amount = tmp[this.layer].buyables[this.id].buyMax()[1]
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(amount))
+                } else {
+                    if (true) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+            },
+            effect(x) {
+                let base = new Decimal("1.01")
+                base = base.add(buyableEffect("bs", 141))
+
+                let effect = base.pow(x)
+                return effect
+            },
+            unlocked() {return hasChallenge("fnf", 11)},
             buyMax() {
                 
             },
@@ -664,9 +739,24 @@ addLayer("tvc", {
         mult = new Decimal("1e1000")
         if (hasUpgrade("fnf", 13)) mult = mult.mul(upgradeEffect("fnf", 13))
         if (hasMilestone("fnf", 12)) mult = mult.mul("1e100")
+        if (hasChallenge("fnf", 11)) mult = mult.mul("1e250")
+
+        //exp delay
+        if (hasChallenge("fnf", 12)) mult = mult.pow(player.bsm.sacExp)
+
         player.tvc.softcap1Start = mult
     },
     branches: [["fnf", 1]],
+
+    automate() {
+        let layer = "tvc"
+        let list = [11, 12, 21, 22, 31]
+        for (const id of list) {
+            if (canBuyBuyable(layer, id) && tmp[layer].buyables[id].unlocked) {
+                if (hasChallenge("fnf", 11)) tmp[layer].buyables[id].buy()
+            }
+        }
+    },
 
     tooltip() {
         let text = format(player.tvc.points) + " Toxic Violet Cubes (+" + format(getResetGain("tvc")) + " TVC/s)"
