@@ -2411,8 +2411,8 @@ addLayer("bs", {
             },
             rewardDescription: function() {
                 let extra = ""
-                if (hasUpgrade("bs", 81)) extra = " and +25% player health "
-                return "x1000 FP and x1e100 BS combo" + extra + "per completion.<br>Completions: " + challengeCompletions(this.layer, this.id) + "/" + tmp[this.layer].challenges[this.id].completionLimit
+                if (hasUpgrade("bs", 81)) extra = " and +25% player health"
+                return "x1000 FP and x1e100 BS combo" + extra + " per completion.<br>Completions: " + challengeCompletions(this.layer, this.id) + "/" + tmp[this.layer].challenges[this.id].completionLimit
             },
             rewardDisplay() {
                 let extra = ``
