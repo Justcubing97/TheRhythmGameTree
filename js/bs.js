@@ -527,7 +527,7 @@ addLayer("bs", {
         },
         82: {
             title: "Anti-Scaling",
-            description: "Remove the first Girlfriend Level scaling. Additionally, lower the exponent for FCTs and they boost Songs.",
+            description: "Remove the first Girlfriend Level scaling. Additionally, lower the exponent for FCTs.",
             cost: new Decimal("1e6020"),
             unlocked() {return hasMilestone("fnf", 19)},
         },
