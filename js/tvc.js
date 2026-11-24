@@ -239,9 +239,9 @@ addLayer("tvc", {
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
         15: {
-            requirementDescription: "15: 1e2175 Toxic Violet Cubes",
+            requirementDescription: "15: 1e2100 Toxic Violet Cubes",
             effectDescription: "Weaken the first ME softcap and unlock the 4th week of FNF upgrades. Unlock an effect of Girlfriend Level.",
-            done() { return player.tvc.points.gte("1e2175") },
+            done() { return player.tvc.points.gte("1e2100") },
             unlocked() { return hasMilestone(this.layer, this.id - 1) }
         },
         16: {
