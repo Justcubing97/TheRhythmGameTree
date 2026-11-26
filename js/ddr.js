@@ -172,9 +172,6 @@ addLayer("ddr", {
         keptBars.freeze = player.ddr.freeze
         keptBars.chaos = player.ddr.chaos
 
-        let keptBuyables = []
-        if (hasUpgrade("bs", 13)) keptBuyables.push(getBuyableAmount(this.layer, 22))
-
         // Stage 3, track which main features you want to keep - all upgrades, total points, specific toggles, etc.
         let keep = [];
         if (hasUpgrade("bs", 14)) keep.push("milestones")
@@ -191,8 +188,6 @@ addLayer("ddr", {
         player.ddr.air = keptBars.air
         player.ddr.freeze = keptBars.freeze
         player.ddr.chaos = keptBars.chaos
-        
-        if (hasUpgrade("bs", 13)) setBuyableAmount(this.layer, 22, keptBuyables[0])
     }, //THANK YOU ESCAPEE FROM THE TMT SERVER
     upgrades: {
         11: {
@@ -723,13 +718,13 @@ addLayer("ddr", {
                 }
 
                 addBuyables(this.layer, 11, new Decimal(5))
-                addBuyables(this.layer, 12, new Decimal(5))
-                addBuyables(this.layer, 13, new Decimal(5))
-                addBuyables(this.layer, 21, new Decimal(5))
-                addBuyables(this.layer, 23, new Decimal(5))
-                addBuyables(this.layer, 31, new Decimal(5))
-                addBuyables(this.layer, 32, new Decimal(5))
-                addBuyables(this.layer, 33, new Decimal(5))
+                if (getBuyableAmount(this.layer, 12).add(5).lte(500)) addBuyables(this.layer, 12, new Decimal(5))
+                if (getBuyableAmount(this.layer, 13).add(5).lte(500)) addBuyables(this.layer, 13, new Decimal(5))
+                if (getBuyableAmount(this.layer, 21).add(5).lte(500)) addBuyables(this.layer, 21, new Decimal(5))
+                if (getBuyableAmount(this.layer, 23).add(5).lte(250)) addBuyables(this.layer, 23, new Decimal(5))
+                if (getBuyableAmount(this.layer, 31).add(5).lte(250)) addBuyables(this.layer, 31, new Decimal(5))
+                if (getBuyableAmount(this.layer, 32).add(5).lte(150)) addBuyables(this.layer, 32, new Decimal(5))
+                if (getBuyableAmount(this.layer, 33).add(5).lte(200)) addBuyables(this.layer, 33, new Decimal(5))
             },
             effect(x) {
                 if (inChallenge("bs", 21)) return new Decimal(0)

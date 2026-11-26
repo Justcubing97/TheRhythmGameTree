@@ -12,11 +12,13 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "4.1",
-	name: "Girlfriend Level expansion + tweaks",
+	num: "4.1.1",
+	name: "Early BS layer softlock fix",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h2>v4.1.1</h2><br>
+        - Changed logic behind Machine Enhancer DDR buyable, ensuring that the stupid bug does not return. <br><br>
 	<h2>v4.1</h2><br>
         - Expanded FNF layer. <br>
         - DanceDance-Upgrade achievement is slightly reworked. <br>
